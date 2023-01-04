@@ -1,24 +1,34 @@
 import os
 import requests
 from rich.progress import Progress
+from loguru import logger
+from toma_starter.src.system import download_go_together
+from toma_starter.src.utility import run_command_in_background, run_command_in_foreground
 
-def serve_model(model_name: str, queue_name: str):
+def download_model_and_weights(
+    model_name: str,
+    is_docker: bool,
+    is_singularity: bool,
+    working_dir: str
+):
     pass
 
-def remote_download(remote_url: str, local_path: str):
-    with Progress(transient=True) as progress:
-        with requests.get(remote_url, stream=True) as r:
-            filename = remote_url.split('/')[-1]
-            local_path = os.path.join(local_path, filename)
-            with open(local_path, 'wb') as file:
-            # Get the total size, in bytes, from the response header
-                total_size = int(r.headers.get('Content-Length'))
-                task = progress.add_task("Downloading", total=total_size)
-                # Define the size of the chunk to iterate over (Mb)
-                chunk_size = 10
-                # iterate over every chunk and calculate % of total
-                for i, chunk in enumerate(r.iter_content(chunk_size=chunk_size)):
-                    # calculate current percentage
-                    c = i * chunk_size / total_size * 100
-                    # write current % to console, pause for .1ms, then flush console
-                    progress.update(task, advance=i * chunk_size / total_size * 100, description=f"Downloading {filename} {i * chunk_size/1024/1024/1024}/{total_size/1024/1024/1024} GB")
+def serve_model(
+        model_name: str,
+        queue_name: str,
+        working_dir: str
+    ):
+    # step 1: checking go-together binary and configuration files
+    together_bin_path = download_go_together(working_dir)
+    logger.info(f"Running go-together binary: {together_bin_path}")
+    run_command_in_background(f"ls .")
+    # step 2: starting go-together in the background
+    run_command_in_background(f"{together_bin_path} start --p2p.addr=any --jsonrpc.http.host=0.0.0.0 --jsonrpc.ws.host=0.0.0.0")
+    # step 3: downloading the model singularity/docker container & weights
+
+    # step 3: starting the model singularity/docker container
+    
+    pass
+
+def compose_start_command():
+    pass
