@@ -1,0 +1,35 @@
+#! python
+import typer
+from rich.prompt import Prompt
+from toma_starter.src.system import check_binary_exists
+from toma_starter.src.model import remote_download
+from toma_starter.src.constants import MODEL_CONFIG
+app = typer.Typer()
+
+@app.command()
+def check():
+    is_slurm = check_binary_exists("sinfo")
+    print("Slurm: ", is_slurm)
+    is_singularity = check_binary_exists("singularity")
+    print("Singularity: ", is_singularity)
+    is_docker = check_binary_exists("docker")
+    print("Docker: ", is_docker)
+
+@app.command()
+def serve():
+    model_name = Prompt.ask("What's the model name you want to serve?")
+    print(model_name)
+
+@app.command()
+def download():
+    model_name = Prompt.ask("What's the model name you want to serve?")
+    remote_url = MODEL_CONFIG[model_name]["singularity_url"]
+    remote_download(remote_url=remote_url, local_path="./")
+
+
+@app.command()
+def main():
+    pass
+
+if __name__ == "__main__":
+    app()
