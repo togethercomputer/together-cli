@@ -18,8 +18,7 @@ BINARY_CONFIG = {
     }
 }
 
-SLURM_TEMPLATES_DOCKER = """
-#!/bin/bash
+SLURM_TEMPLATES_DOCKER = """#!/bin/bash
 {{SLURM_HEAD}}
 
 docker run --rm --gpus '"device={{CUDA_VISIBLE_DEVICES}}"' --ipc=host \

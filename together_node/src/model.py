@@ -2,10 +2,10 @@ import os
 import requests
 from rich.progress import Progress
 from loguru import logger
-from toma_starter.src.system import download_go_together
-from toma_starter.src.utility import run_command_in_background, run_command_in_foreground, remote_download
-from toma_starter.src.constants import MODEL_CONFIG
-from toma_starter.src.utility import makeup_submission_scripts
+from together_node.src.system import download_go_together
+from together_node.src.utility import run_command_in_background, run_command_in_foreground, remote_download
+from together_node.src.constants import MODEL_CONFIG
+from together_node.src.utility import makeup_submission_scripts
 
 def download_model_and_weights(
     model_name: str,
@@ -38,6 +38,8 @@ def serve_model(
         working_dir: str,
         use_docker: bool=False,
         use_singularity: bool=False,
+        gpus: str="",
+        account: str="",
     ):
     # step 1: checking go-together binary and configuration files
     if use_docker and use_singularity:
@@ -64,14 +66,25 @@ def serve_model(
             working_dir=working_dir
         )
     # step 4: checking submission starting scripts
-    makeup_submission_scripts(
+    submission_script = makeup_submission_scripts(
         model_name,
         is_docker=use_docker,
         is_singularity=use_singularity,
         working_dir = working_dir,
+        gpus = gpus,
+        queue_name = queue_name,
+        account = account,
     )
+    logger.info(f"Submission script:{submission_script}")
+    # step 4.1: write the submission script to a file
+    scripts_dir = os.path.join(working_dir, "scripts")
+    if not os.path.exists(scripts_dir):
+        os.makedirs(scripts_dir)
+    with open(os.path.join(scripts_dir, f"{model_name}.slurm"), "w") as f:
+        f.write(submission_script)
     # step 5: starting the submission
-    pass
+    completed_process = run_command_in_foreground(f"sbatch {os.path.join(scripts_dir, f'{model_name}.slurm')}")
+    logger.info(f"Submission started. {completed_process.stdout}")
 
 def compose_start_command():
     pass

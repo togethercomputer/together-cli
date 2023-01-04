@@ -1,8 +1,8 @@
 import os
 import subprocess
 from loguru import logger
-from toma_starter.src.constants import BINARY_CONFIG
-from toma_starter.src.utility import remote_download, run_command_in_foreground
+from together_node.src.constants import BINARY_CONFIG
+from together_node.src.utility import remote_download, run_command_in_foreground
 
 def check_binary_exists(binary):
     """Check if a binary exists in the path.

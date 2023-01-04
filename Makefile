@@ -3,7 +3,7 @@ install:
 
 format:
 	autoflake -i **/*.py
-	isort -i toma_starter/**/*.py
+	isort -i together_node/**/*.py
 	yapf -i **/*.py
 
 clean:

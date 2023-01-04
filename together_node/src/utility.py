@@ -6,7 +6,7 @@ import subprocess
 from typing import Dict
 from loguru import logger
 from rich.progress import Progress
-from toma_starter.src.constants import MODEL_CONFIG, SLURM_TEMPLATES_DOCKER
+from together_node.src.constants import MODEL_CONFIG, SLURM_TEMPLATES_DOCKER
 
 def remote_download(remote_url: str, local_path: str):
     with Progress(transient=True) as progress:
@@ -36,7 +36,7 @@ def run_command_in_background(cmd: str):
     )
 
 def run_command_in_foreground(cmd: str):
-    return subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT)
+    return subprocess.run(cmd, capture_output=True, shell=True)
 
 def makeup_submission_scripts(
         model_name: str,
@@ -44,6 +44,9 @@ def makeup_submission_scripts(
         is_singularity: bool,
         additional_args: Dict={},
         working_dir: str=None,
+        gpus: str = None,
+        queue_name = None,
+        account = None,
     ):
     # we should also check if it is running slurm, but skip it for now
     additional_args['worker.model'] = MODEL_CONFIG[model_name]['worker_model']
@@ -57,4 +60,25 @@ def makeup_submission_scripts(
         submission_script = submission_script.replace("{{DOCKER_STARTUP_SCRIPT}}", startup_script)
         submission_script = submission_script.replace("{{DOCKER_ID}}", MODEL_CONFIG[model_name]["docker_id"])
     submission_script = submission_script.replace("{{TOGETHER_PATH}}", working_dir)
-    logger.info(f"Submission script:{submission_script}")
+    gpu_num = gpus.split(":")[1]
+    CUDA_VISIBLE_DEVICES = ",".join([str(i) for i in range(int(gpu_num))])
+    submission_script = submission_script.replace("{{CUDA_VISIBLE_DEVICES}}", CUDA_VISIBLE_DEVICES)
+    # now process the headers
+    slurm_heads = {
+        "job-name": f"together-{model_name}",
+        "time":"1:00:00",
+        "ntasks":1,
+        "cpus-per-task": 4,
+        "mem-per-cpu": "8G",
+        "output": f"{working_dir}/together-{model_name}-%j.out",
+        "error": f"{working_dir}/together-{model_name}-%j.err",
+        "partition": queue_name,
+        "account": account,
+        "gres": f"gpu:{gpus}"
+    }
+    slurm_head_str = ""
+    for key, value in slurm_heads.items():
+        slurm_head_str = slurm_head_str + f"#SBATCH --{key}={value} \n"
+    submission_script = submission_script.replace("{{SLURM_HEAD}}", slurm_head_str)
+
+    return submission_script
