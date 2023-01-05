@@ -43,6 +43,6 @@ singularity run --nv \
 --env NVIDIA_DRIVER_CAPABILITIES=compute,utility \
 --ipc=host \
 --env NUM_WORKERS=auto \
--v {{TOGETHER_PATH}}:/home/user/.together \
+--bind {{TOGETHER_PATH}}:/home/user/.together \
 {{SIF_NAME}} {{STARTUP_SCRIPT}}
 """

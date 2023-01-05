@@ -10,23 +10,31 @@ from together_node.src.templates import generate_slurm_heads
 from together_node.src.constants import MODEL_CONFIG, SLURM_TEMPLATES_DOCKER, SLURM_TEMPLATES_SINGULARITY
 
 def remote_download(remote_url: str, local_path: str):
-    with Progress(transient=True) as progress:
+    logger.info(f"Downloading file from {remote_url} to {local_path} ...")
+    filename = remote_url.split('/')[-1]
+    local_path = os.path.join(local_path, filename)
+    # check if the file already exists
+    if os.path.exists(local_path):
+        logger.info(f"File {filename} already exists, skipping download.")
+        logger.info(f"If you want to download the file again, please delete the file at {local_path} first.")
+        return
+    with Progress(transient=False) as progress:
         with requests.get(remote_url, stream=True) as r:
-            filename = remote_url.split('/')[-1]
-            local_path = os.path.join(local_path, filename)
             with open(local_path, 'wb') as file:
             # Get the total size, in bytes, from the response header
-                total_size = int(r.headers.get('Content-Length'))
+                total_size = int(r.headers.get('Content-Length')) # in bytes
                 task = progress.add_task("Downloading", total=total_size)
                 # Define the size of the chunk to iterate over (Mb)
-                chunk_size = 10
+                chunk_size = 10 * 1024 * 1024 # in bytes
                 # iterate over every chunk and calculate % of total
                 for i, chunk in enumerate(r.iter_content(chunk_size=chunk_size)):
                     file.write(chunk)
-                    # calculate current percentage
-                    # write current % to console, pause for .1ms, then flush console
                     description = f"Downloading {filename} {i * chunk_size/1024/1024/1024:.2f}/{total_size/1024/1024/1024:.2f} GB"
-                    progress.update(task, advance=i * chunk_size / total_size * 100, description=description)
+                    progress.update(
+                        task,
+                        completed=i * chunk_size,
+                        description=description
+                    )
 
 def run_command_in_background(cmd: str):
     args = shlex.split(cmd)
@@ -55,7 +63,9 @@ def makeup_docker_startscript(
         startup_script = startup_script + f" --{key}={value}"
     submission_script = submission_script.replace("{{DOCKER_STARTUP_SCRIPT}}", startup_script)
     submission_script = submission_script.replace("{{DOCKER_ID}}", MODEL_CONFIG[model_name]["docker_id"])
+
     submission_script = submission_script.replace("{{TOGETHER_PATH}}", working_dir)
+    
     gpu_num = gpus.split(":")[1]
     CUDA_VISIBLE_DEVICES = ",".join([str(i) for i in range(int(gpu_num))])
     submission_script = submission_script.replace("{{CUDA_VISIBLE_DEVICES}}", CUDA_VISIBLE_DEVICES)
@@ -72,7 +82,16 @@ def makeup_singularity_startscript(
     account:str = None,
     together_args: Dict= None,
 ):
-    submission_script = submission_script.replace("{{SIF_NAME}}", MODEL_CONFIG[model_name]["sif_name"])
+    sif_path_name = os.path.join(
+        working_dir,
+        "images",
+        MODEL_CONFIG[model_name]["sif_name"],
+    )
+    # check if the sif file exists
+    if not os.path.exists(sif_path_name):
+        logger.error(f"Cannot find sif file {sif_path_name}")
+        raise ValueError(f"Cannot find sif file {sif_path_name}")
+    submission_script = submission_script.replace("{{SIF_NAME}}", sif_path_name)
     submission_script = submission_script.replace("{{TOGETHER_PATH}}", working_dir)
     
     return submission_script

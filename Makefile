@@ -23,3 +23,6 @@ publish-test:
 
 publish:
 	twine upload dist/*
+
+install-test:
+	pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ together_node -U
