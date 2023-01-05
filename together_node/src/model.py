@@ -53,18 +53,20 @@ def serve_model(
         logger.error("You must choose one of docker or singularity")
     
     if use_singularity:
-        together_bin_path = download_go_together(working_dir)
-        logger.info(f"Running go-together binary: {together_bin_path}")
-        run_command_in_background(f"ls .")
-        # step 2: starting go-together in the background
-        run_command_in_background(f"{together_bin_path} start --p2p.addr=any --jsonrpc.http.host=0.0.0.0 --jsonrpc.ws.host=0.0.0.0")
+        # together_bin_path = download_go_together(working_dir)
+        # logger.info(f"Running go-together binary: {together_bin_path}")
+        # run_command_in_background(f"ls .")
+        # # step 2: starting go-together in the background
+        # run_command_in_background(f"{together_bin_path} start --p2p.addr=any --jsonrpc.http.host=0.0.0.0 --jsonrpc.ws.host=0.0.0.0")
         # step 3: downloading the model singularity/docker container & weights
+        """
         download_model_and_weights(
             model_name,
             is_docker=use_docker, 
             is_singularity=use_singularity,
             working_dir=working_dir
         )
+        """
     # step 4: checking submission starting scripts
     submission_script = makeup_submission_scripts(
         model_name,
@@ -83,8 +85,9 @@ def serve_model(
     with open(os.path.join(scripts_dir, f"{model_name}.slurm"), "w") as f:
         f.write(submission_script)
     # step 5: starting the submission
-    completed_process = run_command_in_foreground(f"sbatch {os.path.join(scripts_dir, f'{model_name}.slurm')}")
-    logger.info(f"Submission started. {completed_process.stdout}")
+    # completed_process = run_command_in_foreground(f"sbatch {os.path.join(scripts_dir, f'{model_name}.slurm')}")
+    # logger.info(f"Submission started. {completed_process.stdout}")
+    # logger.info(f"stderr: {completed_process.stderr}")
 
 def compose_start_command():
     pass
