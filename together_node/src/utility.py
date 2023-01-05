@@ -93,7 +93,12 @@ def makeup_singularity_startscript(
         raise ValueError(f"Cannot find sif file {sif_path_name}")
     submission_script = submission_script.replace("{{SIF_NAME}}", sif_path_name)
     submission_script = submission_script.replace("{{TOGETHER_PATH}}", working_dir)
-    
+    weights_path = os.path.join(
+        working_dir,
+        "weights",
+        model_name,
+    )
+    submission_script = submission_script.replace("{{WEIGHTS_PATH}}", weights_path)
     return submission_script
 
 def makeup_submission_scripts(

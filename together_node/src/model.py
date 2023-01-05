@@ -1,11 +1,8 @@
 import os
-import requests
-from rich.progress import Progress
 from loguru import logger
-from together_node.src.system import download_go_together
-from together_node.src.utility import run_command_in_background, run_command_in_foreground, remote_download
 from together_node.src.constants import MODEL_CONFIG
-from together_node.src.utility import makeup_submission_scripts
+from together_node.src.system import download_go_together
+from together_node.src.utility import run_command_in_foreground, remote_download, makeup_submission_scripts
 
 def download_model_and_weights(
     model_name: str,
@@ -18,25 +15,24 @@ def download_model_and_weights(
     images_dir = os.path.join(working_dir, "images")
     if not os.path.exists(images_dir):
         os.makedirs(images_dir)
-
     # weights folder
     weights_dir = os.path.join(working_dir, "weights", model_name)
-    if not os.path.exists(weights_dir):
-        os.makedirs(weights_dir)
-
+    weights_already_exist = os.path.exists(weights_dir)
+    
     if is_singularity:
         # download the singularity container
         remote_download(model_config["singularity_url"], images_dir)
-        remote_download(model_config["weights_url"], weights_dir)
-        
-        # decompress the weights
-        logger.info(f"Decompressing the weights to {weights_dir}...")
-        run_command_in_foreground(f"tar -xvf {os.path.join(weights_dir, model_config['weights_url'].split('/')[-1])} -C {weights_dir}")
+        if not weights_already_exist:
+            os.makedirs(weights_dir)
+            remote_download(model_config["weights_url"], weights_dir)
+            # decompress the weights
+            logger.info(f"Decompressing the weights to {weights_dir}...")
+            run_command_in_foreground(f"tar -xvf {os.path.join(weights_dir, model_config['weights_url'].split('/')[-1])} -C {weights_dir}")
 
-        run_command_in_foreground(f"rm {os.path.join(weights_dir, model_config['weights_url'].split('/')[-1])}")
+            run_command_in_foreground(f"rm {os.path.join(weights_dir, model_config['weights_url'].split('/')[-1])}")
     # elif is_docker:
     # everything will be automatically downloaded by docker
-
+    # upd: to download weights transparently
 def serve_model(
         model_name: str,
         queue_name: str,
@@ -60,10 +56,6 @@ def serve_model(
     if use_singularity:
         together_bin_path = download_go_together(working_dir)
         logger.info(f"Running go-together binary: {together_bin_path}")
-        # run_command_in_background(f"ls .")
-        # step 2: starting go-together in the background
-        # run_command_in_background(f"{together_bin_path} start --p2p.addr=any --jsonrpc.http.host=0.0.0.0 --jsonrpc.ws.host=0.0.0.0")
-        # step 3: downloading the model singularity/docker container & weights
         download_model_and_weights(
             model_name,
             is_docker=use_docker, 

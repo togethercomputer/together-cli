@@ -20,7 +20,7 @@ def check():
 @app.command()
 def serve(
         model: str=typer.Option(..., prompt="What's the model name you want to serve?"), 
-        queue: str=typer.Option(..., prompt="What's the queue name you want to serve?"),
+        queue: str=typer.Option(None),
         wd: str=typer.Option(..., prompt="What's the working directory you want to serve?"),
         docker: Optional[bool]=typer.Option(False),
         singularity: bool = typer.Option(False),

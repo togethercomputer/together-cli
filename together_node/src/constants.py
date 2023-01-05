@@ -44,5 +44,6 @@ singularity run --nv \
 --ipc=host \
 --env NUM_WORKERS=auto \
 --bind {{TOGETHER_PATH}}:/home/user/.together \
+--bind {{WEIGHTS_PATH}}:/home/user/.together/models \
 {{SIF_NAME}} {{STARTUP_SCRIPT}}
 """

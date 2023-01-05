@@ -6,13 +6,10 @@ from together_node.src.utility import remote_download, run_command_in_foreground
 
 def check_binary_exists(binary):
     """Check if a binary exists in the path.
-
     Args:
         binary (str): The binary to check for.
-
     Returns:
         bool: True if the binary exists, False otherwise.
-
     """
     try:
         subprocess.check_output(["which", binary])
