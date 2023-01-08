@@ -11,7 +11,6 @@ def makeup_docker_startscript(
     home_dir: str=None,
     data_dir: str=None,
     gpus: str = None,
-    queue_name = None,
 ):
     # compose sbatch header
     startup_script = MODEL_CONFIG[model_name]["startup_script"]
@@ -20,10 +19,8 @@ def makeup_docker_startscript(
         startup_script = startup_script + f" --{key}={value}"
     submission_script = submission_script.replace("{{DOCKER_STARTUP_SCRIPT}}", startup_script)
     submission_script = submission_script.replace("{{DOCKER_ID}}", MODEL_CONFIG[model_name]["docker_id"])
-
     submission_script = submission_script.replace("{{TOGETHER_HOME_DIR}}", home_dir)
     submission_script = submission_script.replace("{{TOGETHER_DATA_DIR}}", data_dir)
-
     gpu_num = gpus.split(":")[1]
     CUDA_VISIBLE_DEVICES = ",".join([str(i) for i in range(int(gpu_num))])
     submission_script = submission_script.replace("{{CUDA_VISIBLE_DEVICES}}", CUDA_VISIBLE_DEVICES)
@@ -50,17 +47,11 @@ def makeup_singularity_startscript(
         logger.error(f"Cannot find sif file {sif_path_name}")
         raise ValueError(f"Cannot find sif file {sif_path_name}")
     submission_script = submission_script.replace("{{SIF_NAME}}", sif_path_name)
-    
     submission_script = submission_script.replace("{{TOGETHER_HOME_DIR}}", home_dir)
-    
     submission_script = submission_script.replace("{{TOGETHER_DATA_DIR}}", data_dir)
-    
     submission_script = submission_script.replace("{{WORKER_MODEL_NAME}}", MODEL_CONFIG[model_name]['worker_model'])
-    
     submission_script = submission_script.replace("{{MODEL_NAME}}", model_name)
-
     submission_script = submission_script.replace("{{MODEL_TYPE}}", MODEL_CONFIG[model_name]['model_type'])
-
     return submission_script
 
 def makeup_submission_scripts(
@@ -115,7 +106,6 @@ def makeup_submission_scripts(
     modules_str = ""
     if modules is not None:
             modules_str += f"module load {modules}"
-    
     submission_script = submission_script.replace("{{MODULES}}", modules_str)
     submission_script = submission_script.replace("{{STARTUP_COMMAND}}", MODEL_CONFIG[model_name]['startup_command'])
     return submission_script
