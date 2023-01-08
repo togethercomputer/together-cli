@@ -16,7 +16,7 @@ def generate_slurm_heads(
         "mem-per-cpu": "8G",
         "output": f"{working_dir}/together-{model_name}-%j.out",
         "error": f"{working_dir}/together-{model_name}-%j.err",
-        "gres": f"gpu:{gpus}"
+        "gpus": f"{gpus}"
     }
     if account:
         slurm_heads["account"] = account

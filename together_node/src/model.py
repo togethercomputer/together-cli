@@ -33,6 +33,7 @@ def download_model_and_weights(
     # elif is_docker:
     # everything will be automatically downloaded by docker
     # upd: to download weights transparently
+    
 def serve_model(
         model_name: str,
         queue_name: str,

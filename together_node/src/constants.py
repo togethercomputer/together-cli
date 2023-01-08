@@ -41,7 +41,6 @@ SLURM_TEMPLATES_SINGULARITY = """#!/bin/bash
 
 singularity run --nv \
 --env NVIDIA_DRIVER_CAPABILITIES=compute,utility \
---ipc=host \
 --env NUM_WORKERS=auto \
 --bind {{TOGETHER_PATH}}:/home/user/.together \
 --bind {{WEIGHTS_PATH}}:/home/user/.together/models \
