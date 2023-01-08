@@ -2,11 +2,10 @@ from typing import Dict
 
 def generate_slurm_heads(
     model_name: str,
-    working_dir: str,
+    data_dir: str,
     account: str = None,
     gpus: str = None,
-    queue_name = None,
-
+    queue_name = None
 ):
     slurm_heads = {
         "job-name": f"together-{model_name}",
@@ -14,8 +13,8 @@ def generate_slurm_heads(
         "ntasks":1,
         "cpus-per-task": 4,
         "mem-per-cpu": "8G",
-        "output": f"{working_dir}/together-{model_name}-%j.out",
-        "error": f"{working_dir}/together-{model_name}-%j.err",
+        "output": f"{data_dir}/logs/together-{model_name}-%j.out",
+        "error": f"{data_dir}/logs/together-{model_name}-%j.err",
         "gpus": f"{gpus}"
     }
     if account:

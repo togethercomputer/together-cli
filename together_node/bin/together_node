@@ -22,7 +22,7 @@ def serve(
         # required arguments
         model: str=typer.Option(..., prompt="What's the model name you want to serve?"), 
         home_dir: str=typer.Option(..., prompt="What's the home directory you want to serve? It cannot be on an NFS drive."),
-        weights_dir: str=typer.Option(..., prompt="What's the directory you want to store model weights? It could be on an NFS drive."),
+        data_dir: str=typer.Option(..., prompt="What's the directory you want to store model weights? It could be on an NFS drive."),
 
         # optional, but suggested arguments
         gpus: str = typer.Option(..., prompt="GPU Specifiers (e.g., titanrtx:1)"),
@@ -31,9 +31,11 @@ def serve(
         docker: Optional[bool]=typer.Option(False, help="Use docker to serve the model"),
         account: str = typer.Option(None, help="Account name - default is None"),
         modules: str = typer.Option(None, help="Modules to load - default is None"),
+        
         # only required in some cases
         name: str=typer.Option("together", help="Unique name of the node - default is together. You should set this name to a unique name if you want to run multiple nodes at the same time."),
-        port: int=typer.Option(8092, help="Port number - default is 8092. In case of conflict, change it to a different number."),
+        hf_home: str = typer.Option(None, help="Huggingface home directory - default is None"),
+        # port: int=typer.Option(8092, help="Port number - default is 8092. In case of conflict, change it to a different number."),
     ):
     if docker and singularity:
         print("You can only choose one of docker or singularity")
@@ -42,11 +44,13 @@ def serve(
         model_name=model,
         queue_name=queue,
         home_dir = home_dir,
-        weights_dir = weights_dir,
+        data_dir = data_dir,
         use_docker=docker,
         use_singularity=singularity,
         gpus = gpus,
         account = account,
+        node_name = name,
+        modules = modules,
     )
     
 
