@@ -1,3 +1,5 @@
+from together_node.src.core.render import render
+
 SINGULARITY_TEMPLAE="""
 singularity run --nv \
 --env NUM_WORKERS=auto \
@@ -10,7 +12,6 @@ singularity run --nv \
 /usr/local/bin/together start --worker.model_type {{MODEL_TYPE}} --worker.model {{WORKER_MODEL_NAME}} --datadir /host_together_home --worker.model_dir /home/user/.together/models/ --worker.env "HF_HOME=/hf" --worker.mode local-service --worker.group.alloc each --worker.command {{STARTUP_COMMAND}}
 """
 
-from together_node.src.core.render import render
 
 def generate_singularity_script(
     home_dir,

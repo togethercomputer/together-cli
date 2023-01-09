@@ -1,3 +1,5 @@
+from together_node.src.core.render import render
+
 DOCKER_TEMPLATE="""
 docker run --rm --gpus '"device=all"' --ipc=host \
 -e NUM_WORKERS=auto \
@@ -8,7 +10,6 @@ docker run --rm --gpus '"device=all"' --ipc=host \
 -v {{TOGETHER_DATA_DIR}}/scratch:/scratch \
 {{CONTAINER_ID}} /usr/local/bin/together start --worker.model_type {{MODEL_TYPE}} --worker.model {{WORKER_MODEL_NAME}} --datadir /host_together_home --worker.model_dir /home/user/.together/models/ --worker.env "HF_HOME=/hf" --worker.mode local-service --worker.group.alloc each --worker.command {{STARTUP_COMMAND}}
 """
-from together_node.src.core.render import render
 
 def generate_docker_script(
     home_dir,
