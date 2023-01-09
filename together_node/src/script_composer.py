@@ -1,8 +1,50 @@
 import os
 from typing import Dict
 from loguru import logger
-from together_node.src.templates import generate_slurm_heads
-from together_node.src.constants import MODEL_CONFIG, SLURM_TEMPLATES_DOCKER, SLURM_TEMPLATES_SINGULARITY
+from together_node.src.clusters.slurm import generate_slurm_script
+from together_node.src.constants import MODEL_CONFIG
+
+def makeup_slurm_scripts(
+        model_name: str,
+        is_docker: bool,
+        is_singularity: bool,
+        additional_args: Dict={},
+        home_dir: str=None,
+        data_dir: str=None,
+        gpus: str = None,
+        queue_name = None,
+        account = None,
+        modules = None,
+    ):
+    # generate slurm templates
+    slurm_templates = generate_slurm_script(
+        model_name=model_name,
+        data_dir=data_dir,
+        modules=modules,
+        account=account,
+        gpus=gpus,
+        queue_name=queue_name,
+    )
+    # generate actual commands
+    if is_docker:
+        from together_node.src.backend.docker import generate_docker_script
+        submission_command = generate_docker_script(
+            home_dir=home_dir,
+            data_dir=data_dir,
+            model_name=model_name
+        )
+    elif is_singularity:
+        from together_node.src.backend.singularity import generate_singularity_script
+        submission_command = generate_singularity_script(
+            home_dir=home_dir,
+            data_dir=data_dir,
+            model_name = model_name
+        )
+    else:
+        raise NotImplementedError("Either docker and singularity must be enabled.")
+    slurm_submission_scripts = slurm_templates.replace("{{COMMAND}}", submission_command)
+    return slurm_submission_scripts
+"""
 
 def makeup_docker_startscript(
     model_name: str,
@@ -109,3 +151,4 @@ def makeup_submission_scripts(
     submission_script = submission_script.replace("{{MODULES}}", modules_str)
     submission_script = submission_script.replace("{{STARTUP_COMMAND}}", MODEL_CONFIG[model_name]['startup_command'])
     return submission_script
+"""

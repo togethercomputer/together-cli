@@ -1,5 +1,5 @@
 from together_node.src.core.render import render
-
+from together_node.src.constants import MODEL_CONFIG
 DOCKER_TEMPLATE="""
 docker run --rm --gpus '"device=all"' --ipc=host \
 -e NUM_WORKERS=auto \
@@ -14,17 +14,19 @@ docker run --rm --gpus '"device=all"' --ipc=host \
 def generate_docker_script(
     home_dir,
     data_dir,
-    model_name,
-    worker_model_name,
-    model_type,
-    STARTUP_COMMAND
+    model_name
 ):
+    worker_model_name = MODEL_CONFIG[model_name]['worker_model']
+    model_type = MODEL_CONFIG[model_name]['model_type']
+    startup_command = MODEL_CONFIG[model_name]['startup_command']
+    container_id = MODEL_CONFIG[model_name]['docker_id']
     return render(
         DOCKER_TEMPLATE,
         together_home_dir=home_dir,
         together_data_dir=data_dir,
-        MODEL_NAME=model_name,
-        WORKER_MODEL_NAME=worker_model_name,
-        MODEL_TYPE=model_type,
-        STARTUP_COMMAND=STARTUP_COMMAND
+        model_name=model_name,
+        worker_model_name=worker_model_name,
+        model_type=model_type,
+        startup_command=startup_command,
+        container_id=container_id,
     )

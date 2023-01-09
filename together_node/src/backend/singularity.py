@@ -1,4 +1,5 @@
 from together_node.src.core.render import render
+from together_node.src.constants import MODEL_CONFIG
 
 SINGULARITY_TEMPLAE="""
 singularity run --nv \
@@ -17,11 +18,11 @@ def generate_singularity_script(
     home_dir,
     data_dir,
     model_name,
-    worker_model_name,
-    model_type,
-    startup_command,
-    container_id,
 ):
+    worker_model_name = MODEL_CONFIG[model_name]['worker_model']
+    model_type = MODEL_CONFIG[model_name]['model_type']
+    startup_command = MODEL_CONFIG[model_name]['startup_command']
+    container_id = MODEL_CONFIG[model_name]['sif_name']
     return render(
         SINGULARITY_TEMPLAE,
         together_home_dir=home_dir,

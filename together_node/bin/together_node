@@ -4,7 +4,8 @@ from typing import Optional
 from rich.prompt import Prompt
 from together_node.src.model import serve_model
 from together_node.src.constants import MODEL_CONFIG
-from together_node.src.system import check_binary_exists, remote_download
+from together_node.src.utility import remote_download
+from together_node.src.system import check_binary_exists, check_folders
 
 app = typer.Typer()
 
@@ -37,9 +38,18 @@ def serve(
         hf_home: str = typer.Option(None, help="Huggingface home directory - default is None"),
         # port: int=typer.Option(8092, help="Port number - default is 8092. In case of conflict, change it to a different number."),
     ):
+    
     if docker and singularity:
-        print("You can only choose one of docker or singularity")
+        print("[ERROR] You can only choose one of docker or singularity")
         return
+    if docker:
+        print("[INFO] Containerization: Docker")
+    elif singularity:
+        print("[INFO] Containerization: Singularity")
+    else:
+        print("[ERROR] You must choose one of docker or singularity")
+    check_folders(home_dir = home_dir, data_dir=data_dir)
+
     serve_model(
         model_name=model,
         queue_name=queue,

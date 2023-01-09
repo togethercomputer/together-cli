@@ -1,9 +1,8 @@
 import os
 from loguru import logger
 from together_node.src.constants import MODEL_CONFIG
-from together_node.src.system import download_go_together
+from together_node.src.script_composer import makeup_slurm_scripts
 from together_node.src.utility import run_command_in_foreground, remote_download
-from together_node.src.script_composer import makeup_submission_scripts
 
 def download_model_and_weights(
     model_name: str,
@@ -47,37 +46,15 @@ def serve_model(
         node_name: str="",
         port: int=5000,
     ):
-    # step 0: checking if required folder exists
-    in_data_dirs = ['weights', 'scratch', 'images', 'logs']
-    for in_data_dir in in_data_dirs:
-        if not os.path.exists(os.path.join(data_dir, in_data_dir)):
-            os.makedirs(os.path.join(data_dir, in_data_dir))
-    in_home_dirs = ['hf']
-    for in_home_dir in in_home_dirs:
-        if not os.path.exists(os.path.join(home_dir, in_home_dir)):
-            os.makedirs(os.path.join(home_dir, in_home_dir))
-    # step 1: checking go-together binary and configuration files
-    if use_docker and use_singularity:
-        logger.error("You can only choose one of docker or singularity")
-        return
-    if use_docker:
-        logger.info("Containerization: Docker")
-    elif use_singularity:
-        logger.info("Containerization: Singularity")
-    else:
-        logger.error("You must choose one of docker or singularity")
-    
-    if use_singularity:
-        # together_bin_path = download_go_together(home_dir)
-        # logger.info(f"Running go-together binary: {together_bin_path}")
-        download_model_and_weights(
-            model_name,
-            is_docker=use_docker, 
-            is_singularity=use_singularity,
-            working_dir=data_dir
-        )
+    # step 0: check if needed to download the model and weights   
+    download_model_and_weights(
+        model_name,
+        is_docker=use_docker, 
+        is_singularity=use_singularity,
+        working_dir=data_dir
+    )
     # step 4: checking submission starting scripts
-    submission_script = makeup_submission_scripts(
+    submission_script = makeup_slurm_scripts(
         model_name,
         is_docker=use_docker,
         is_singularity=use_singularity,

@@ -10,7 +10,6 @@ clean:
 	rm -rf build
 	rm -rf dist
 	rm -rf toma.egg-info
-	rm -rf .cache
 
 build:
 	make clean
