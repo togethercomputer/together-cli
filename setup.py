@@ -5,7 +5,7 @@ setup(
     author="Xiaozhe Yao",
     author_email="askxzyao@gmail.com",
     description="TOMA Cluster Manager",
-    version='0.0.28',
+    version='0.0.29',
     scripts=["together_node/bin/together_node"],
     package_dir={'together_node': 'together_node'},
     packages=find_packages(),
