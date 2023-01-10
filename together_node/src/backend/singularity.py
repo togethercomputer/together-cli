@@ -10,14 +10,16 @@ singularity run --nv \
 --bind {{TOGETHER_HOME_DIR}}/hf:/hf  \
 --bind {{TOGETHER_DATA_DIR}}/scratch:/scratch \
 {{TOGETHER_DATA_DIR}}/images/{{CONTAINER_ID}} \
-/usr/local/bin/together start --worker.model_type {{MODEL_TYPE}} --worker.model {{WORKER_MODEL_NAME}} --datadir /host_together_home --worker.model_dir /home/user/.together/models/ --worker.env "HF_HOME=/hf" --worker.mode local-service --worker.group.alloc each --worker.command {{STARTUP_COMMAND}}
+/usr/local/bin/together start --worker.model_type {{MODEL_TYPE}} --worker.model {{WORKER_MODEL_NAME}} --datadir /host_together_home --worker.model_dir /home/user/.together/models/ --worker.env "HF_HOME=/hf" --worker.mode local-service --worker.group.alloc each --worker.command {{STARTUP_COMMAND}} --worker.tags {{TAGS}} --computer.api {{MATCHMAKER_ADDR}}
 """
 
 
 def generate_singularity_script(
-    home_dir,
-    data_dir,
-    model_name,
+    home_dir: str,
+    data_dir: str,
+    model_name: str,
+    tags: str,
+    matchmaker_addr: str,
 ):
     worker_model_name = MODEL_CONFIG[model_name]['worker_model']
     model_type = MODEL_CONFIG[model_name]['model_type']
@@ -32,4 +34,6 @@ def generate_singularity_script(
         model_type=model_type,
         startup_command=startup_command,
         container_id=container_id,
+        tags = tags,
+        matchmaker_addr = matchmaker_addr,
     )

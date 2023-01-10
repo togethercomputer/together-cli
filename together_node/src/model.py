@@ -22,22 +22,22 @@ def download_model_and_weights(
     if is_singularity:
         # download the singularity container
         remote_download(model_config["singularity_url"], images_dir)
-        if not weights_already_exist:
-            os.makedirs(weights_dir)
-            remote_download(model_config["weights_url"], weights_dir)
-            # decompress the weights
-            logger.info(f"Decompressing the weights to {weights_dir}...")
-            run_command_in_foreground(f"tar -xvf {os.path.join(weights_dir, model_config['weights_url'].split('/')[-1])} -C {weights_dir}")
-            run_command_in_foreground(f"rm {os.path.join(weights_dir, model_config['weights_url'].split('/')[-1])}")
-    # elif is_docker:
-    # everything will be automatically downloaded by docker
-    # upd: to download weights transparently
-
+    # weights need to be downloaded anyway
+    if not weights_already_exist:
+        os.makedirs(weights_dir)
+        remote_download(model_config["weights_url"], weights_dir)
+        # decompress the weights
+        logger.info(f"Decompressing the weights to {weights_dir}...")
+        run_command_in_foreground(f"tar -xvf {os.path.join(weights_dir, model_config['weights_url'].split('/')[-1])} -C {weights_dir}")
+        run_command_in_foreground(f"rm {os.path.join(weights_dir, model_config['weights_url'].split('/')[-1])}")
+    
 def serve_model(
         model_name: str,
         queue_name: str,
         home_dir: str,
         data_dir: str,
+        matchmaker_addr: str,
+        tags: str,
         use_docker: bool=False,
         use_singularity: bool=False,
         modules: str="",
@@ -53,20 +53,41 @@ def serve_model(
         is_singularity=use_singularity,
         working_dir=data_dir
     )
-    # step 4: checking submission starting scripts
+    # step 2: generate the actual command to run
+    run_command = None
+    if use_docker:
+        from together_node.src.backend.docker import generate_docker_script
+        run_command = generate_docker_script(
+            home_dir=home_dir,
+            data_dir=data_dir,
+            model_name=model_name,
+            tags = tags,
+            matchmaker_addr = matchmaker_addr,
+        )
+    elif use_singularity:
+        from together_node.src.backend.singularity import generate_singularity_script
+        run_command = generate_singularity_script(
+            home_dir=home_dir,
+            data_dir=data_dir,
+            model_name=model_name,
+            tags = tags,
+            matchmaker_addr = matchmaker_addr,
+        )
+    else:
+        raise ValueError("Either docker or singularity should be used.")
+    # step 3: checking submission starting scripts
     submission_script = makeup_slurm_scripts(
         model_name,
-        is_docker=use_docker,
-        is_singularity=use_singularity,
         home_dir = home_dir,
         data_dir = data_dir,
         gpus = gpus,
         queue_name = queue_name,
         account = account,
         modules = modules,
+        run_command=run_command,
     )
     logger.info(f"Submission script:{submission_script}")
-    # step 4.1: write the submission script to a file
+    # step 4: write the submission script to a file
     scripts_dir = os.path.join(data_dir, "scripts")
     if not os.path.exists(scripts_dir):
         os.makedirs(scripts_dir)

@@ -15,6 +15,7 @@ def remote_download(remote_url: str, local_path: str):
         logger.info(f"File {filename} already exists, skipping download.")
         logger.info(f"If you want to download the file again, please delete the file at {local_path} first.")
         return
+
     with Progress(transient=False) as progress:
         with requests.get(remote_url, stream=True) as r:
             with open(local_path, 'wb') as file:
