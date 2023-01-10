@@ -1,6 +1,8 @@
 import os
 import sys
 import shlex
+import random
+import string
 import requests
 import subprocess
 from loguru import logger
@@ -44,3 +46,7 @@ def run_command_in_background(cmd: str):
 
 def run_command_in_foreground(cmd: str):
     return subprocess.run(cmd, capture_output=True, shell=True)
+
+
+def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
+   return ''.join(random.choice(chars) for _ in range(size))

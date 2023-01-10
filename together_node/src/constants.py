@@ -22,7 +22,6 @@ MODEL_CONFIG = {
         "worker_model":"StableDiffusion",
         "docker_id": "togethercomputer/fastertransformer",
         "sif_name": "stablediffusion_general.sif",
-        "model_type": "gpt",
         "startup_command":"/home/user/serve.sh"
     },
     'gpt-jt': {

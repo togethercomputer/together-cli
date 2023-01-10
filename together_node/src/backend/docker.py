@@ -1,5 +1,6 @@
 from together_node.src.core.render import render
 from together_node.src.constants import MODEL_CONFIG
+from together_node.src.utility import id_generator
 
 DOCKER_TEMPLATE="""
 docker run --rm --gpus '"device=all"' --ipc=host \
@@ -9,7 +10,7 @@ docker run --rm --gpus '"device=all"' --ipc=host \
 -v {{TOGETHER_DATA_DIR}}/weights/{{MODEL_NAME}}:/home/user/.together/models/ \
 -v {{TOGETHER_HOME_DIR}}/hf:/hf \
 -v {{TOGETHER_DATA_DIR}}/scratch:/scratch \
-{{CONTAINER_ID}} /usr/local/bin/together start  --worker.model {{WORKER_MODEL_NAME}} --datadir /host_together_home --worker.model_dir /home/user/.together/models/ --worker.env "HF_HOME=/hf" --worker.mode local-service --worker.group.alloc each --worker.command {{STARTUP_COMMAND}} {{TAGS}} {{MODEL_TYPE}} --computer.api {{MATCHMAKER_ADDR}}
+{{CONTAINER_ID}} /usr/local/bin/together start {{NODE_NAME}}  --worker.model {{WORKER_MODEL_NAME}} --datadir /host_together_home --worker.model_dir /home/user/.together/models/ --worker.env "HF_HOME=/hf" --worker.mode local-service --worker.group.alloc each --worker.command {{STARTUP_COMMAND}} {{TAGS}} {{MODEL_TYPE}} --computer.api {{MATCHMAKER_ADDR}}
 """
 
 def generate_docker_script(
@@ -19,9 +20,10 @@ def generate_docker_script(
     tags:str,
     matchmaker_addr:str,
 ):
+    node_name = id_generator(size=10)
     worker_model_name = MODEL_CONFIG[model_name]['worker_model']
     model_type=""
-    if 'model_type' in MODEL_CONFIG[model_name]['model_type']:
+    if 'model_type' in MODEL_CONFIG[model_name]:
         model_type = f"--worker.model_type {MODEL_CONFIG[model_name]['model_type']}"
     if tags!="":
         tags = "--worker.tags " + tags
@@ -38,4 +40,5 @@ def generate_docker_script(
         container_id=container_id,
         tags = tags,
         matchmaker_addr = matchmaker_addr,
+        node_name = node_name,
     )
