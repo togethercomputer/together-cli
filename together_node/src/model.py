@@ -23,7 +23,7 @@ def download_model_and_weights(
         # download the singularity container
         remote_download(model_config["singularity_url"], images_dir)
     # weights need to be downloaded anyway
-    if not weights_already_exist:
+    if not weights_already_exist and "weights_url" in model_config:
         os.makedirs(weights_dir)
         remote_download(model_config["weights_url"], weights_dir)
         # decompress the weights
@@ -94,9 +94,10 @@ def serve_model(
     with open(os.path.join(scripts_dir, f"{model_name}.slurm"), "w") as f:
         f.write(submission_script)
     # step 5: starting the submission
-    # completed_process = run_command_in_foreground(f"sbatch {os.path.join(scripts_dir, f'{model_name}.slurm')}")
-    # logger.info(f"Submission started. {completed_process.stdout}")
-    # logger.info(f"stderr: {completed_process.stderr}")
+    completed_process = run_command_in_foreground(f"sbatch {os.path.join(scripts_dir, f'{model_name}.slurm')}")
+    print("Submitted to slurm")
+    logger.info(f"{completed_process.stdout}")
+    logger.info(f"{completed_process.stderr}")
 
 def compose_start_command():
     pass
