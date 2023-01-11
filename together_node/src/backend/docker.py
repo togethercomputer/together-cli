@@ -5,7 +5,7 @@ from together_node.src.utility import id_generator
 
 DOCKER_TEMPLATE="""
 docker run --rm --gpus device=$CUDA_VISIBLE_DEVICES --ipc=host \
--e NUM_WORKERS=1 \
+-e NUM_WORKERS=auto \
 -v {{TOGETHER_DATA_DIR}}:/home/user/.together \
 -v {{TOGETHER_HOME_DIR}}:/host_together_home \
 -v {{TOGETHER_DATA_DIR}}/weights/{{MODEL_NAME}}:/home/user/.together/models/ \
