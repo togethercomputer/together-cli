@@ -20,7 +20,7 @@ MODEL_CONFIG = {
     'stable-diffusion': {
         "singularity_url": "https://filedn.eu/lougUsdPvd1uJK2jfOYWogH/toma_models/stablediffusion_general.sif",
         "worker_model":"StableDiffusion",
-        "docker_id": "togethercomputer/fastertransformer",
+        "docker_id": "xzyaoi/stablediffusion:general",
         "sif_name": "stablediffusion_general.sif",
         "startup_command":"/home/user/serve.sh"
     },

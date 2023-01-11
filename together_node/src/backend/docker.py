@@ -10,7 +10,7 @@ docker run --rm --gpus '"device=all"' --ipc=host \
 -v {{TOGETHER_DATA_DIR}}/weights/{{MODEL_NAME}}:/home/user/.together/models/ \
 -v {{TOGETHER_HOME_DIR}}/hf:/hf \
 -v {{TOGETHER_DATA_DIR}}/scratch:/scratch \
-{{CONTAINER_ID}} /usr/local/bin/together start {{NODE_NAME}}  --worker.model {{WORKER_MODEL_NAME}} --datadir /host_together_home --worker.model_dir /home/user/.together/models/ --worker.env "HF_HOME=/hf" --worker.mode local-service --worker.group.alloc each --worker.command {{STARTUP_COMMAND}} {{TAGS}} {{MODEL_TYPE}} --computer.api {{MATCHMAKER_ADDR}}
+{{CONTAINER_ID}} /usr/local/bin/together start --name {{NODE_NAME}}  --worker.model {{WORKER_MODEL_NAME}} --datadir /host_together_home --worker.model_dir /home/user/.together/models/ --worker.env "HF_HOME=/hf" --worker.mode local-service --worker.group.alloc each --worker.command {{STARTUP_COMMAND}} {{TAGS}} {{MODEL_TYPE}} --computer.api {{MATCHMAKER_ADDR}}
 """
 
 def generate_docker_script(
