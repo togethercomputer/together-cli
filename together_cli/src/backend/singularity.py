@@ -1,6 +1,6 @@
 from together_cli.src.core.render import render
-from together_cli.src.constants import MODEL_CONFIG
 from together_cli.src.utility import id_generator
+from together_cli.src.constants import MODEL_CONFIG
 
 SINGULARITY_TEMPLAE="""
 singularity run --nv \
@@ -11,7 +11,7 @@ singularity run --nv \
 --bind {{TOGETHER_HOME_DIR}}/hf:/hf  \
 --bind {{TOGETHER_DATA_DIR}}/scratch:/scratch \
 {{TOGETHER_DATA_DIR}}/images/{{CONTAINER_ID}} \
-/usr/local/bin/together start --name {{NODE_NAME}} --worker.model {{WORKER_MODEL_NAME}} --datadir /host_together_home --worker.model_dir /home/user/.together/models/ --worker.env "HF_HOME=/hf" --worker.mode local-service --worker.group.alloc each --worker.command {{STARTUP_COMMAND}} {{MODEL_TYPE}} {{TAGS}} --computer.api {{MATCHMAKER_ADDR}}
+/usr/local/bin/together start --name {{NODE_NAME}} --worker.model {{WORKER_MODEL_NAME}} --datadir /host_together_home --worker.model_dir /home/user/.together/models/ --worker.env "HF_HOME=/hf" --worker.mode local-service --worker.group.alloc each --worker.command {{STARTUP_COMMAND}} {{MODEL_TYPE}} {{TAGS}} {{HTTP_PORT}} {{WS_PORT}} --computer.api {{MATCHMAKER_ADDR}}
 """
 
 def generate_singularity_script(
@@ -20,6 +20,7 @@ def generate_singularity_script(
     model_name: str,
     tags: str,
     matchmaker_addr: str,
+    port:int,
 ):
     node_name = id_generator(size=10)
     worker_model_name = MODEL_CONFIG[model_name]['worker_model']
@@ -28,6 +29,8 @@ def generate_singularity_script(
         model_type = f"--worker.model_type {MODEL_CONFIG[model_name]['model_type']}"
     if tags!="":
         tags = "--worker.tags " + tags
+    http_port = f"--jsonrpc.http.port {port}"
+    ws_port = f"--jsonrpc.ws.port {port+1}"
     startup_command = MODEL_CONFIG[model_name]['startup_command']
     container_id = MODEL_CONFIG[model_name]['sif_name']
     return render(
@@ -42,4 +45,6 @@ def generate_singularity_script(
         tags = tags,
         matchmaker_addr = matchmaker_addr,
         node_name = node_name,
+        http_port = http_port,
+        ws_port = ws_port,
     )

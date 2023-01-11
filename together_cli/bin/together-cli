@@ -30,15 +30,16 @@ def serve(
         queue: str=typer.Option(None, help="Queue name - default is None"),
         singularity: bool = typer.Option(False, help="Use singularity to serve the model"),
         docker: Optional[bool]=typer.Option(False, help="Use docker to serve the model"),
-        tags: Optional[str] = typer.Option("", help="Only Process Academic jobs"),
+        tags: Optional[str] = typer.Option("", help="tags"),
         account: str = typer.Option(None, help="Account name - default is None"),
         modules: str = typer.Option(None, help="Modules to load - default is None"),
         
         # only required in some cases
         name: str=typer.Option("together", help="Unique name of the node - default is together. You should set this name to a unique name if you want to run multiple nodes at the same time."),
         hf_home: str = typer.Option(None, help="Huggingface home directory - default is home_dir/hf"),
+        duration: str = typer.Option("1:00:00", help="Duration of the job - default is '1:00:00'"),
         matchmaker_addr: str = typer.Option("wss://api.together.xyz/websocket", help="Global Matchmaker address - leave it as it is in most cases"),
-        # port: int=typer.Option(8092, help="Port number - default is 8092. In case of conflict, change it to a different number."),
+        port: int=typer.Option(8092, help="Port number - default is 8092-8093. In case of conflict, change it to a different number, increase by 2"),
         node_list: str = typer.Option(None, help="Node list - default is None"),
     ):
     if docker and singularity:
@@ -65,6 +66,8 @@ def serve(
         account = account,
         modules = modules,
         node_list = node_list,
+        port=port,
+        duration = duration,
     )
     
 

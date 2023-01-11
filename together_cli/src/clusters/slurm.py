@@ -15,7 +15,8 @@ def generate_slurm_script(
     account: str = None,
     gpus: str = None,
     queue_name: str = None,
-    node_list: str=None,
+    node_list: str = None,
+    duration: str = None
 ):
     heads_str = generate_slurm_heads(
         model_name=model_name,
@@ -24,6 +25,7 @@ def generate_slurm_script(
         gpus=gpus,
         queue_name=queue_name,
         node_list=node_list,
+        duration = duration,
     )
     return render(
         SLURM_TEMPLATES, 
@@ -39,10 +41,11 @@ def generate_slurm_heads(
     gpus: str = None,
     queue_name = None,
     node_list = None,
+    duration=None,
 ):
     slurm_heads = {
         "job-name": f"together-{model_name}",
-        "time":"1:00:00",
+        "time":f"{duration}",
         "ntasks":1,
         "cpus-per-task": 4,
         "mem-per-cpu": "8G",

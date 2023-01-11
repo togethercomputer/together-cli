@@ -11,7 +11,7 @@ docker run --rm --gpus device=$CUDA_VISIBLE_DEVICES --ipc=host \
 -v {{TOGETHER_DATA_DIR}}/weights/{{MODEL_NAME}}:/home/user/.together/models/ \
 -v {{TOGETHER_HOME_DIR}}/hf:/hf \
 -v {{TOGETHER_DATA_DIR}}/scratch:/scratch \
-{{CONTAINER_ID}} /usr/local/bin/together start --name {{NODE_NAME}}  --worker.model {{WORKER_MODEL_NAME}} --datadir /host_together_home --worker.model_dir /home/user/.together/models/ --worker.env "HF_HOME=/hf" --worker.mode local-service --worker.group.alloc each --worker.command {{STARTUP_COMMAND}} {{TAGS}} {{MODEL_TYPE}} --computer.api {{MATCHMAKER_ADDR}}
+{{CONTAINER_ID}} /usr/local/bin/together start --name {{NODE_NAME}}  --worker.model {{WORKER_MODEL_NAME}} --datadir /host_together_home --worker.model_dir /home/user/.together/models/ --worker.env "HF_HOME=/hf" --worker.mode local-service --worker.group.alloc each --worker.command {{STARTUP_COMMAND}} {{TAGS}} {{MODEL_TYPE}} {{HTTP_PORT}} {{WS_PORT}} --computer.api {{MATCHMAKER_ADDR}}
 """
 
 def generate_docker_script(
@@ -20,6 +20,7 @@ def generate_docker_script(
     model_name:str,
     tags:str,
     matchmaker_addr:str,
+    port:int
 ):
     node_name = id_generator(size=10)
     worker_model_name = MODEL_CONFIG[model_name]['worker_model']
@@ -28,6 +29,8 @@ def generate_docker_script(
         model_type = f"--worker.model_type {MODEL_CONFIG[model_name]['model_type']}"
     if tags!="":
         tags = "--worker.tags " + tags
+    http_port = f"--jsonrpc.http.port {port}"
+    ws_port = f"--jsonrpc.ws.port {port+1}"
     startup_command = MODEL_CONFIG[model_name]['startup_command']
     container_id = MODEL_CONFIG[model_name]['docker_id']
     return render(
@@ -42,4 +45,6 @@ def generate_docker_script(
         tags = tags,
         matchmaker_addr = matchmaker_addr,
         node_name = node_name,
+        http_port = http_port,
+        ws_port = ws_port,
     )

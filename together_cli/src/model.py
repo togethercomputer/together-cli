@@ -44,6 +44,8 @@ def serve_model(
         gpus: str="",
         account: str="",
         node_list: str=None,
+        port: int=None,
+        duration: str="",
     ):
     # step 0: check if needed to download the model and weights   
     download_model_and_weights(
@@ -62,6 +64,7 @@ def serve_model(
             model_name=model_name,
             tags = tags,
             matchmaker_addr = matchmaker_addr,
+            port = port,
         )
     elif use_singularity:
         from together_cli.src.backend.singularity import generate_singularity_script
@@ -71,6 +74,7 @@ def serve_model(
             model_name=model_name,
             tags = tags,
             matchmaker_addr = matchmaker_addr,
+            port = port,
         )
     else:
         raise ValueError("Either docker or singularity should be used.")
@@ -85,6 +89,7 @@ def serve_model(
         modules = modules,
         run_command=run_command,
         node_list=node_list,
+        duration = duration,
     )
     logger.info(f"Submission script:{submission_script}")
     # step 4: write the submission script to a file
