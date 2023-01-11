@@ -5,7 +5,7 @@ setup(
     author="Xiaozhe Yao",
     author_email="askxzyao@gmail.com",
     description="Together Node is a tool to help you join together computer",
-    version='0.0.37',
+    version='0.0.38',
     scripts=["together_node/bin/together_node"],
     package_dir={'together_node': 'together_node'},
     packages=find_packages(),

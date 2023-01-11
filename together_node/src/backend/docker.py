@@ -4,7 +4,7 @@ from together_node.src.constants import MODEL_CONFIG
 from together_node.src.utility import id_generator
 
 DOCKER_TEMPLATE="""
-docker run --rm --gpus '"device={{CUDA_VISIBLE_DEVICES}}"' --ipc=host \
+docker run --rm --gpus device=$CUDA_VISIBLE_DEVICES --ipc=host \
 -e NUM_WORKERS=1 \
 -v {{TOGETHER_DATA_DIR}}:/home/user/.together \
 -v {{TOGETHER_HOME_DIR}}:/host_together_home \
@@ -21,7 +21,6 @@ def generate_docker_script(
     tags:str,
     matchmaker_addr:str,
 ):
-    cuda_visible_devices = os.environ.get('CUDA_VISIBLE_DEVICES', 'all')
     node_name = id_generator(size=10)
     worker_model_name = MODEL_CONFIG[model_name]['worker_model']
     model_type=""
@@ -43,5 +42,4 @@ def generate_docker_script(
         tags = tags,
         matchmaker_addr = matchmaker_addr,
         node_name = node_name,
-        cuda_visible_devices = cuda_visible_devices,
     )
