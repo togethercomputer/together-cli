@@ -26,7 +26,7 @@ MODEL_CONFIG = {
     },
     'gpt-jt': {
         "singularity_url": "https://filedn.eu/lougUsdPvd1uJK2jfOYWogH/toma_models/ft_base_ampere.sif",
-        "weights_url":"https://filedn.eu/lougUsdPvd1uJK2jfOYWogH/toma_models/opt-1.3b-tp1.tar.gz",
+        "weights_url":"https://together-singularity.s3.us-west-2.amazonaws.com/gpt-jt-6b-v1.tar.gz",
         "worker_model":"GPT-JT-6B-v1-tp1",
         "docker_id": "xzyaoi/faster_transformer:ampere",
         "sif_name": "ft_base_ampere.sif",
