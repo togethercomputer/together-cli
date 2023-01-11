@@ -4,7 +4,7 @@ from together_node.src.utility import id_generator
 
 SINGULARITY_TEMPLAE="""
 singularity run --nv \
---env NUM_WORKERS=auto \
+--env NUM_WORKERS=1 \
 --env TEMP=/scratch \
 --bind {{TOGETHER_HOME_DIR}}:/host_together_home \
 --bind {{TOGETHER_DATA_DIR}}/weights/{{MODEL_NAME}}:/home/user/.together/models/ \
