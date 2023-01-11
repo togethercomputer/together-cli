@@ -37,8 +37,9 @@ def serve(
         # only required in some cases
         name: str=typer.Option("together", help="Unique name of the node - default is together. You should set this name to a unique name if you want to run multiple nodes at the same time."),
         hf_home: str = typer.Option(None, help="Huggingface home directory - default is home_dir/hf"),
-        matchmaker_addr: str = typer.Option("wss://api.together.xyz/websocket", help="Global Matchmaker address - leave it as it is in most cases")
+        matchmaker_addr: str = typer.Option("wss://api.together.xyz/websocket", help="Global Matchmaker address - leave it as it is in most cases"),
         # port: int=typer.Option(8092, help="Port number - default is 8092. In case of conflict, change it to a different number."),
+        node_list: str = typer.Option(None, help="Node list - default is None"),
     ):
     if docker and singularity:
         print("[ERROR] You can only choose one of docker or singularity")
@@ -62,8 +63,8 @@ def serve(
         use_singularity=singularity,
         gpus = gpus,
         account = account,
-        node_name = name,
         modules = modules,
+        node_list = node_list,
     )
     
 

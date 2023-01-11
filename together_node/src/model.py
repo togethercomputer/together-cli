@@ -43,8 +43,7 @@ def serve_model(
         modules: str="",
         gpus: str="",
         account: str="",
-        node_name: str="",
-        port: int=5000,
+        node_list: str=None,
     ):
     # step 0: check if needed to download the model and weights   
     download_model_and_weights(
@@ -85,6 +84,7 @@ def serve_model(
         account = account,
         modules = modules,
         run_command=run_command,
+        node_list=node_list,
     )
     logger.info(f"Submission script:{submission_script}")
     # step 4: write the submission script to a file

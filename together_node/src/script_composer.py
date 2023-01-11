@@ -13,6 +13,7 @@ def makeup_slurm_scripts(
         account = None,
         modules = None,
         run_command=None,
+        node_list=None,
     ):
     # generate slurm templates
     slurm_templates = generate_slurm_script(
@@ -22,6 +23,7 @@ def makeup_slurm_scripts(
         account=account,
         gpus=gpus,
         queue_name=queue_name,
+        node_list=node_list,
     )
     slurm_submission_scripts = slurm_templates.replace("{{COMMAND}}", run_command)
     return slurm_submission_scripts

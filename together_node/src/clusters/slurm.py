@@ -15,6 +15,7 @@ def generate_slurm_script(
     account: str = None,
     gpus: str = None,
     queue_name: str = None,
+    node_list: str=None,
 ):
     heads_str = generate_slurm_heads(
         model_name=model_name,
@@ -22,6 +23,7 @@ def generate_slurm_script(
         account=account,
         gpus=gpus,
         queue_name=queue_name,
+        node_list=node_list,
     )
     return render(
         SLURM_TEMPLATES, 
@@ -35,7 +37,8 @@ def generate_slurm_heads(
     data_dir: str,
     account: str = None,
     gpus: str = None,
-    queue_name = None
+    queue_name = None,
+    node_list = None,
 ):
     slurm_heads = {
         "job-name": f"together-{model_name}",
@@ -51,6 +54,8 @@ def generate_slurm_heads(
         slurm_heads["account"] = account
     if queue_name:
         slurm_heads["partition"] = queue_name
+    if node_list:
+        slurm_heads["nodelist"] = node_list
     slurm_head_str = ""
     for key, value in slurm_heads.items():
         slurm_head_str = slurm_head_str + f"#SBATCH --{key}={value}\n"
