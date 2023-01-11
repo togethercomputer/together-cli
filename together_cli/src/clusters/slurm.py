@@ -1,4 +1,4 @@
-from together_node.src.core.render import render
+from together_cli.src.core.render import render
 
 SLURM_TEMPLATES = """#!/bin/bash
 {{SLURM_HEAD}}

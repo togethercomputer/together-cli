@@ -1,8 +1,8 @@
 import os
 from loguru import logger
-from together_node.src.constants import MODEL_CONFIG
-from together_node.src.script_composer import makeup_slurm_scripts
-from together_node.src.utility import run_command_in_foreground, remote_download
+from together_cli.src.constants import MODEL_CONFIG
+from together_cli.src.script_composer import makeup_slurm_scripts
+from together_cli.src.utility import run_command_in_foreground, remote_download
 
 def download_model_and_weights(
     model_name: str,
@@ -55,7 +55,7 @@ def serve_model(
     # step 2: generate the actual command to run
     run_command = None
     if use_docker:
-        from together_node.src.backend.docker import generate_docker_script
+        from together_cli.src.backend.docker import generate_docker_script
         run_command = generate_docker_script(
             home_dir=home_dir,
             data_dir=data_dir,
@@ -64,7 +64,7 @@ def serve_model(
             matchmaker_addr = matchmaker_addr,
         )
     elif use_singularity:
-        from together_node.src.backend.singularity import generate_singularity_script
+        from together_cli.src.backend.singularity import generate_singularity_script
         run_command = generate_singularity_script(
             home_dir=home_dir,
             data_dir=data_dir,

@@ -1,8 +1,8 @@
 import os
 from typing import Dict
 from loguru import logger
-from together_node.src.clusters.slurm import generate_slurm_script
-from together_node.src.constants import MODEL_CONFIG
+from together_cli.src.clusters.slurm import generate_slurm_script
+from together_cli.src.constants import MODEL_CONFIG
 
 def makeup_slurm_scripts(
         model_name: str,

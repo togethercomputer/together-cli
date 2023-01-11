@@ -3,7 +3,7 @@ install:
 
 format:
 	autoflake -i **/*.py
-	isort -i together_node/**/*.py
+	isort -i together_cli/**/*.py
 	yapf -i **/*.py
 
 clean:
@@ -25,4 +25,4 @@ publish:
 	twine upload dist/*
 
 install-test:
-	pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ together_node -U
+	pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ together_cli -U

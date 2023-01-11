@@ -1,13 +1,13 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='together_node',
-    author="Xiaozhe Yao",
-    author_email="askxzyao@gmail.com",
+    name='together_cli',
+    author="togethercomputer",
+    author_email="support@together.xyz",
     description="Together Node is a tool to help you join together computer",
-    version='0.0.41',
-    scripts=["together_node/bin/together_node"],
-    package_dir={'together_node': 'together_node'},
+    version='0.0.1',
+    scripts=["together_cli/bin/together-cli"],
+    package_dir={'together_cli': 'together_cli'},
     packages=find_packages(),
     install_requires=[
         "typer",

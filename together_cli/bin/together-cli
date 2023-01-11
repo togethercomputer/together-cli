@@ -2,10 +2,10 @@
 import typer
 from typing import Optional
 from rich.prompt import Prompt
-from together_node.src.model import serve_model
-from together_node.src.constants import MODEL_CONFIG
-from together_node.src.utility import remote_download
-from together_node.src.system import check_binary_exists, check_folders
+from together_cli.src.model import serve_model
+from together_cli.src.constants import MODEL_CONFIG
+from together_cli.src.utility import remote_download
+from together_cli.src.system import check_binary_exists, check_folders
 
 app = typer.Typer()
 

@@ -1,6 +1,6 @@
-from together_node.src.core.render import render
-from together_node.src.constants import MODEL_CONFIG
-from together_node.src.utility import id_generator
+from together_cli.src.core.render import render
+from together_cli.src.constants import MODEL_CONFIG
+from together_cli.src.utility import id_generator
 
 SINGULARITY_TEMPLAE="""
 singularity run --nv \
