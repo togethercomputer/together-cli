@@ -6,6 +6,8 @@ SINGULARITY_TEMPLAE="""
 singularity run --nv \
 --env NUM_WORKERS=1 \
 --env TEMP=/scratch \
+--env COORD_HTTP_URL={{HTTP_PORT_ENV}} \
+--env COORD_WS_URL={{WS_PORT_ENV}} \
 --bind {{TOGETHER_HOME_DIR}}:/host_together_home \
 --bind {{TOGETHER_DATA_DIR}}/weights/{{MODEL_NAME}}:/home/user/.together/models/ \
 --bind {{TOGETHER_HOME_DIR}}/hf:/hf  \
@@ -29,6 +31,8 @@ def generate_singularity_script(
         model_type = f"--worker.model_type {MODEL_CONFIG[model_name]['model_type']}"
     if tags!="":
         tags = "--worker.tags " + tags
+    http_port_env = f"{port}"
+    ws_port_env = f"{port+1}"
     http_port = f"--jsonrpc.http.port {port}"
     ws_port = f"--jsonrpc.ws.port {port+1}"
     startup_command = MODEL_CONFIG[model_name]['startup_command']
@@ -47,4 +51,6 @@ def generate_singularity_script(
         node_name = node_name,
         http_port = http_port,
         ws_port = ws_port,
+        http_port_env = http_port_env,
+        ws_port_env = ws_port_env,
     )

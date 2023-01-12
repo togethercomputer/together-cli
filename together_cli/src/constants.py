@@ -25,11 +25,11 @@ MODEL_CONFIG = {
         "startup_command":"/home/user/serve.sh"
     },
     'gpt-jt': {
-        "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/ft_base_ampere_together.sif",
+        "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/ft_base_ampere.sif",
         "weights_url":"https://together-singularity.s3.us-west-2.amazonaws.com/gpt-jt-6b-v1.tar.gz",
         "worker_model":"GPT-JT-6B-v1-tp1",
         "docker_id": "xzyaoi/faster_transformer:ampere",
-        "sif_name": "ft_base_ampere_together.sif",
+        "sif_name": "ft_base_ampere.sif",
         "model_type": "gptj",
         "startup_command":"/workspace/Port_FasterTransformer/serve.sh"
     }

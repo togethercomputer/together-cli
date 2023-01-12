@@ -4,7 +4,7 @@ from together_cli.src.constants import MODEL_CONFIG
 from together_cli.src.utility import id_generator
 
 DOCKER_TEMPLATE="""
-docker run --rm --gpus device=$CUDA_VISIBLE_DEVICES --ipc=host \
+docker run {{DAEMON_MODE}} --rm --gpus device=$CUDA_VISIBLE_DEVICES --ipc=host \
 -e NUM_WORKERS=auto \
 -v {{TOGETHER_DATA_DIR}}:/home/user/.together \
 -v {{TOGETHER_HOME_DIR}}:/host_together_home \
@@ -20,7 +20,8 @@ def generate_docker_script(
     model_name:str,
     tags:str,
     matchmaker_addr:str,
-    port:int
+    port:int,
+    daemon_mode:bool
 ):
     node_name = id_generator(size=10)
     worker_model_name = MODEL_CONFIG[model_name]['worker_model']
@@ -47,4 +48,5 @@ def generate_docker_script(
         node_name = node_name,
         http_port = http_port,
         ws_port = ws_port,
+        daemon_mode='--detach' if daemon_mode else ''
     )

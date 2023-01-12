@@ -1,5 +1,6 @@
 import os
 from loguru import logger
+from together_cli.src.clusters import dispatch
 from together_cli.src.constants import MODEL_CONFIG
 from together_cli.src.script_composer import makeup_slurm_scripts
 from together_cli.src.utility import run_command_in_foreground, remote_download
@@ -18,7 +19,7 @@ def download_model_and_weights(
     # weights folder
     weights_dir = os.path.join(working_dir, "weights", model_name)
     weights_already_exist = os.path.exists(weights_dir)
-    
+
     if is_singularity:
         # download the singularity container
         remote_download(model_config["singularity_url"], images_dir)
@@ -46,8 +47,10 @@ def serve_model(
         node_list: str=None,
         port: int=None,
         duration: str="",
+        cluster:str="",
+        dry_run: bool=False,
     ):
-    # step 0: check if needed to download the model and weights   
+    # step 0: check if needed to download the model and weights
     download_model_and_weights(
         model_name,
         is_docker=use_docker, 
@@ -65,6 +68,7 @@ def serve_model(
             tags = tags,
             matchmaker_addr = matchmaker_addr,
             port = port,
+            daemon_mode = True if cluster=='baremetal' else False
         )
     elif use_singularity:
         from together_cli.src.backend.singularity import generate_singularity_script
@@ -79,30 +83,27 @@ def serve_model(
     else:
         raise ValueError("Either docker or singularity should be used.")
     # step 3: checking submission starting scripts
-    submission_script = makeup_slurm_scripts(
-        model_name,
-        home_dir = home_dir,
-        data_dir = data_dir,
-        gpus = gpus,
-        queue_name = queue_name,
-        account = account,
-        modules = modules,
-        run_command=run_command,
-        node_list=node_list,
-        duration = duration,
-    )
-    logger.info(f"Submission script:{submission_script}")
-    # step 4: write the submission script to a file
-    scripts_dir = os.path.join(data_dir, "scripts")
-    if not os.path.exists(scripts_dir):
-        os.makedirs(scripts_dir)
-    with open(os.path.join(scripts_dir, f"{model_name}.slurm"), "w") as f:
-        f.write(submission_script)
-    # step 5: starting the submission
-    completed_process = run_command_in_foreground(f"sbatch {os.path.join(scripts_dir, f'{model_name}.slurm')}")
-    print("Submitted to slurm")
-    logger.info(f"{completed_process.stdout}")
-    logger.info(f"{completed_process.stderr}")
+    if cluster == 'slurm':
+        submission_script = makeup_slurm_scripts(
+            model_name,
+            home_dir = home_dir,
+            data_dir = data_dir,
+            gpus = gpus,
+            queue_name = queue_name,
+            account = account,
+            modules = modules,
+            run_command=run_command,
+            node_list=node_list,
+            duration = duration,
+        )
+    elif cluster == 'baremetal':
+        submission_script = run_command
+    else:
+        raise ValueError(f"Unknown cluster type {cluster}")
+    if not dry_run:
+        dispatch(submission_script=submission_script, model_name=model_name, data_dir=data_dir, cluster_type=cluster)
+    else:
+        logger.info(f"Submission script is generated as follows:{submission_script}")
 
 def compose_start_command():
     pass
