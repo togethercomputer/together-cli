@@ -1,4 +1,5 @@
 #! python
+import os
 import typer
 from typing import Optional
 from rich.prompt import Prompt
@@ -8,6 +9,8 @@ from together_cli.src.utility import remote_download
 from together_cli.src.system import check_binary_exists, check_folders
 
 app = typer.Typer()
+home_dir = os.path.expanduser("~")
+default_together_home = os.path.join(home_dir, "together")
 
 @app.command()
 def check():
@@ -22,8 +25,8 @@ def check():
 def serve(
         # required arguments
         model: str=typer.Option(..., prompt="What's the model name you want to serve?"), 
-        home_dir: str=typer.Option(..., prompt="What's the home directory you want to serve? It cannot be on an NFS drive."),
-        data_dir: str=typer.Option(..., prompt="What's the directory you want to store model weights? It could be on an NFS drive."),
+        home_dir: str=typer.Option(default_together_home, help="The home directory for Together? It cannot be on an NFS drive."),
+        data_dir: str=typer.Option(..., prompt="The directory you want to store model weights? It could be on an NFS drive."),
 
         # optional, but suggested arguments
         gpus: str = typer.Option(None, help="GPU Specifiers (e.g., titanrtx:1), required if you are not using baremetal ndoes"),
