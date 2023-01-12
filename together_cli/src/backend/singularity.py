@@ -4,7 +4,7 @@ from together_cli.src.constants import MODEL_CONFIG
 
 SINGULARITY_TEMPLAE="""
 singularity run --nv \
---env NUM_WORKERS=1 \
+--env NUM_WORKERS=auto \
 --env TEMP=/scratch \
 --env COORD_HTTP_URL={{HTTP_PORT_ENV}} \
 --env COORD_WS_URL={{WS_PORT_ENV}} \

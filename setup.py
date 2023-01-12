@@ -5,7 +5,7 @@ setup(
     author="togethercomputer",
     author_email="support@together.xyz",
     description="Together Node is a tool to help you join together computer",
-    version='0.0.11',
+    version='0.0.19',
     scripts=["together_cli/bin/together-cli"],
     package_dir={'together_cli': 'together_cli'},
     packages=find_packages(),

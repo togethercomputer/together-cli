@@ -6,7 +6,7 @@ from rich.prompt import Prompt
 from together_cli.src.model import serve_model
 from together_cli.src.constants import MODEL_CONFIG
 from together_cli.src.utility import remote_download
-from together_cli.src.system import check_binary_exists, check_folders
+from together_cli.src.system import check_binary_exists, check_folders, check_lockable_drive
 
 app = typer.Typer()
 home_dir = os.path.expanduser("~")
@@ -60,6 +60,11 @@ def serve(
         return
     
     check_folders(home_dir = home_dir, data_dir=data_dir)
+    is_homedir_lockable = check_lockable_drive(home_dir)
+    
+    if not is_homedir_lockable:
+        print("[ERROR] Your home directory is not lockable. Please choose another directory.")
+        return
 
     serve_model(
         model_name=model,
