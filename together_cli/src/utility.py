@@ -7,6 +7,9 @@ import requests
 import subprocess
 from loguru import logger
 from rich.progress import Progress
+from rich.console import Console
+
+console = Console()
 
 def remote_download(remote_url: str, local_path: str):
     logger.info(f"Downloading file from {remote_url} to {local_path} ...")

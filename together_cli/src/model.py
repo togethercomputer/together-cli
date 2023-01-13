@@ -4,6 +4,7 @@ from together_cli.src.clusters import dispatch
 from together_cli.src.constants import MODEL_CONFIG
 from together_cli.src.script_composer import makeup_slurm_scripts
 from together_cli.src.utility import run_command_in_foreground, remote_download
+from together_cli.src.core.instances import persist_instance
 
 def download_model_and_weights(
     model_name: str,
@@ -101,9 +102,31 @@ def serve_model(
     else:
         raise ValueError(f"Unknown cluster type {cluster}")
     if not dry_run:
-        dispatch(submission_script=submission_script, model_name=model_name, data_dir=data_dir, cluster_type=cluster)
+        output = dispatch(submission_script=submission_script, model_name=model_name, data_dir=data_dir, cluster_type=cluster)
+        job_id = output
+        if cluster == "baremetal" and use_docker:
+            job_id = output
+        if cluster == "slurm":
+            job_id = output.split(" ")[-1]
+        persist_instance(
+            model_name=model_name,
+            data_dir=data_dir,
+            cluster=cluster,
+            home_dir=home_dir,
+            queue_name=queue_name,
+            tags=tags,
+            use_docker=use_docker,
+            use_singularity=use_singularity,
+            account=account,
+            node_list=node_list,
+            port=port,
+            duration=duration,
+            gpus=gpus,
+            job_id=job_id,
+        )
     else:
         logger.info(f"Submission script is generated as follows:{submission_script}")
-
+    # register into local database
+    
 def compose_start_command():
     pass

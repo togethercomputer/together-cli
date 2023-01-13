@@ -8,6 +8,7 @@ def dispatch(
         model_name: str,
         data_dir: str,
     ):
+    output = ""
     scripts_dir = os.path.join(data_dir, "scripts")
     if not os.path.exists(scripts_dir):
         os.makedirs(scripts_dir)
@@ -19,7 +20,9 @@ def dispatch(
         # step 5: starting the submission
         completed_process = run_command_in_foreground(f"sbatch {os.path.join(scripts_dir, f'{model_name}.slurm')}")
         print("Submitted to slurm")
-        logger.info(f"{completed_process.stdout}")
+        output = completed_process.stdout
+
+        logger.info(f"{output}")
         logger.info(f"{completed_process.stderr}")
 
     elif cluster_type == 'baremetal':
@@ -27,6 +30,7 @@ def dispatch(
             f.write(submission_script)
         # step 5: starting the submission
         completed_process = run_command_in_foreground(f"bash {os.path.join(scripts_dir, f'{model_name}.sh')}")
-        print("Submitted to baremetal")
-        logger.info(f"{completed_process.stdout}")
+        output = completed_process.stdout
+        logger.info(f"{output}")
         logger.info(f"{completed_process.stderr}")
+    return output.decode("utf-8")

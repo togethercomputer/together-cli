@@ -2,10 +2,8 @@
 import os
 import typer
 from typing import Optional
-from rich.prompt import Prompt
+from together_cli.src.core.instances import pprint_instances
 from together_cli.src.model import serve_model
-from together_cli.src.constants import MODEL_CONFIG
-from together_cli.src.utility import remote_download
 from together_cli.src.system import check_binary_exists, check_folders, check_lockable_drive
 
 app = typer.Typer()
@@ -87,10 +85,8 @@ def serve(
     
 
 @app.command()
-def download():
-    model_name = Prompt.ask("What's the model name you want to serve?")
-    remote_url = MODEL_CONFIG[model_name]["singularity_url"]
-    remote_download(remote_url=remote_url, local_path="./")
+def list():
+    pprint_instances()
 
 @app.command()
 def main():
