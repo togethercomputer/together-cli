@@ -56,7 +56,12 @@ def serve(
     if cluster != 'baremetal' and gpus is None:
         print("[ERROR] You must specify gpus if you are not using baremetal nodes")
         return
-    
+    # expand home_dir and data_dir if they start with ~
+    if home_dir.startswith("~"):
+        home_dir = os.path.expanduser(home_dir)
+    if data_dir.startswith("~"):
+        data_dir = os.path.expanduser(data_dir)
+
     check_folders(home_dir = home_dir, data_dir=data_dir)
     is_homedir_lockable = check_lockable_drive(home_dir)
     
