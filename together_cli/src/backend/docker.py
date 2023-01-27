@@ -12,7 +12,7 @@ docker run {{DAEMON_MODE}} --rm --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=$CUDA
 -v {{TOGETHER_DATA_DIR}}/weights/{{MODEL_NAME}}:/home/user/.together/models/ \
 -v {{TOGETHER_HOME_DIR}}/hf:/hf \
 -v {{TOGETHER_DATA_DIR}}/scratch:/scratch \
-{{CONTAINER_ID}} /usr/local/bin/together start --owner {{OWNER}} --name {{NODE_NAME}}  --worker.model {{WORKER_MODEL_NAME}} --datadir /host_together_home --worker.model_dir /home/user/.together/models/ --worker.env "HF_HOME=/hf" --worker.mode local-service --worker.group.alloc each --worker.command {{STARTUP_COMMAND}} {{TAGS}} {{MODEL_TYPE}} {{HTTP_PORT}} {{WS_PORT}} --computer.api {{MATCHMAKER_ADDR}}
+{{CONTAINER_ID}} /usr/local/bin/together-node start --owner {{OWNER}} --name {{NODE_NAME}}  --worker.model {{WORKER_MODEL_NAME}} --datadir /host_together_home --worker.model_dir /home/user/.together/models/ --worker.env "HF_HOME=/hf" --worker.mode local-service --worker.group.alloc each --worker.command {{STARTUP_COMMAND}} {{TAGS}} {{MODEL_TYPE}} {{HTTP_PORT}} {{WS_PORT}} --computer.api {{MATCHMAKER_ADDR}}
 """
 
 def generate_docker_script(
