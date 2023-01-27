@@ -13,7 +13,7 @@ singularity run --nv \
 --bind {{TOGETHER_HOME_DIR}}/hf:/hf  \
 --bind {{TOGETHER_DATA_DIR}}/scratch:/scratch \
 {{TOGETHER_DATA_DIR}}/images/{{CONTAINER_ID}} \
-/usr/local/bin/together start --name {{NODE_NAME}} --worker.model {{WORKER_MODEL_NAME}} --datadir /host_together_home --worker.model_dir /home/user/.together/models/ --worker.env "HF_HOME=/hf" --worker.mode local-service --worker.group.alloc each --worker.command {{STARTUP_COMMAND}} {{MODEL_TYPE}} {{TAGS}} {{HTTP_PORT}} {{WS_PORT}} --computer.api {{MATCHMAKER_ADDR}}
+/usr/local/bin/together start --owner {{OWNER}} --name {{NODE_NAME}} --worker.model {{WORKER_MODEL_NAME}} --datadir /host_together_home --worker.model_dir /home/user/.together/models/ --worker.env "HF_HOME=/hf" --worker.mode local-service --worker.group.alloc each --worker.command {{STARTUP_COMMAND}} {{MODEL_TYPE}} {{TAGS}} {{HTTP_PORT}} {{WS_PORT}} --computer.api {{MATCHMAKER_ADDR}}
 """
 
 def generate_singularity_script(
@@ -23,6 +23,7 @@ def generate_singularity_script(
     tags: str,
     matchmaker_addr: str,
     port:int,
+    owner: str,
 ):
     node_name = id_generator(size=10)
     worker_model_name = MODEL_CONFIG[model_name]['worker_model']
@@ -53,4 +54,5 @@ def generate_singularity_script(
         ws_port = ws_port,
         http_port_env = http_port_env,
         ws_port_env = ws_port_env,
+        owner=owner,
     )

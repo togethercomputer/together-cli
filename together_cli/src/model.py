@@ -50,6 +50,7 @@ def serve_model(
         duration: str="",
         cluster:str="",
         dry_run: bool=False,
+        owner: str="",
     ):
     # step 0: check if needed to download the model and weights
     download_model_and_weights(
@@ -69,7 +70,8 @@ def serve_model(
             tags = tags,
             matchmaker_addr = matchmaker_addr,
             port = port,
-            daemon_mode = True if cluster=='baremetal' else False
+            daemon_mode = True if cluster=='baremetal' else False,
+            owner=owner,
         )
     elif use_singularity:
         from together_cli.src.backend.singularity import generate_singularity_script
@@ -80,6 +82,7 @@ def serve_model(
             tags = tags,
             matchmaker_addr = matchmaker_addr,
             port = port,
+            owner = owner,
         )
     else:
         raise ValueError("Either docker or singularity should be used.")

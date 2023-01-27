@@ -87,3 +87,24 @@ def pprint_instances():
             str(instance["port"]) if "port" in instance else "N/A",
         )
     console.print(table)
+
+def shutdown_instance(job_id: str):
+    pass
+
+def fetch_logs(job_id: str):
+    default_together_home = os.path.join(os.path.expanduser("~"), "together")
+    # read instances.json
+    with open(os.path.join(default_together_home, "instances.json"), "r") as f:
+        instances = json.load(f)
+    # find instance with job_id
+    instance = [instance for instance in instances if instance["job_id"] == job_id]
+    if len(instance) == 0:
+        raise Exception("Instance not found")
+    instance = instance[0]
+    # now try to fetch logs
+    ## case 1: baremetal docker, run docker logs {job_id}
+    if instance["use_docker"] and instance["cluster"] == "baremetal":
+        os.system(f"docker logs {job_id}")
+    ## case 2: slurm - read logs from slurm log file
+    elif instance["cluster"] == "slurm":
+        pass

@@ -13,6 +13,9 @@ def dispatch(
     if not os.path.exists(scripts_dir):
         os.makedirs(scripts_dir)
 
+    if cluster_type == 'baremetal':
+        logger.warning("You are running in baremetal mode - it may take a while to pull the docker image, please wait patiently.")
+
     if cluster_type=='slurm':
         with open(os.path.join(scripts_dir, f"{model_name}.slurm"), "w") as f:
             f.write(submission_script)
