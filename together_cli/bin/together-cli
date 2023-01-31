@@ -57,7 +57,7 @@ def serve(
         dry_run: bool = typer.Option(
                 False, help="Only Generate submission scripts for review - default is False"),
         owner: str = typer.Option(
-                None, help="Owner of the instance - default is None"),
+                "", help="Owner of the instance - default is None"),
     ):
     if docker and singularity:
         print("[ERROR] You can only choose one of docker or singularity")

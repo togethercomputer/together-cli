@@ -5,6 +5,7 @@ from together_cli.src.constants import MODEL_CONFIG
 from together_cli.src.utility import id_generator
 
 DOCKER_TEMPLATE="""
+docker pull {{CONTAINER_ID}}
 docker run {{DAEMON_MODE}} --rm --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=$CUDA_VISIBLE_DEVICES --ipc=host \
 -e NUM_WORKERS=auto \
 -v {{TOGETHER_DATA_DIR}}:/home/user/.together \
@@ -12,7 +13,7 @@ docker run {{DAEMON_MODE}} --rm --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=$CUDA
 -v {{TOGETHER_DATA_DIR}}/weights/{{MODEL_NAME}}:/home/user/.together/models/ \
 -v {{TOGETHER_HOME_DIR}}/hf:/hf \
 -v {{TOGETHER_DATA_DIR}}/scratch:/scratch \
-{{CONTAINER_ID}} /usr/local/bin/together-node start --owner {{OWNER}} --name {{NODE_NAME}}  --worker.model {{WORKER_MODEL_NAME}} --datadir /host_together_home --worker.model_dir /home/user/.together/models/ --worker.env "HF_HOME=/hf" --worker.mode local-service --worker.group.alloc each --worker.command {{STARTUP_COMMAND}} {{TAGS}} {{MODEL_TYPE}} {{HTTP_PORT}} {{WS_PORT}} --computer.api {{MATCHMAKER_ADDR}}
+{{CONTAINER_ID}} /usr/local/bin/together-node start {{OWNER}} --name {{NODE_NAME}}  --worker.model {{WORKER_MODEL_NAME}} --datadir /host_together_home --worker.model_dir /home/user/.together/models/ --worker.env "HF_HOME=/hf" --worker.mode local-service --worker.group.alloc each --worker.command {{STARTUP_COMMAND}} {{TAGS}} {{MODEL_TYPE}} {{HTTP_PORT}} {{WS_PORT}} --computer.api {{MATCHMAKER_ADDR}}
 """
 
 def generate_docker_script(
@@ -30,12 +31,14 @@ def generate_docker_script(
     model_type=""
     if 'model_type' in MODEL_CONFIG[model_name]:
         model_type = f"--worker.model_type {MODEL_CONFIG[model_name]['model_type']}"
-    if tags!="":
+    if tags and tags!="":
         tags = "--worker.tags " + tags
+    if owner and owner!="":
+        owner="--owner " + owner
     http_port = f"--jsonrpc.http.port {port}"
     ws_port = f"--jsonrpc.ws.port {port+1}"
     startup_command = MODEL_CONFIG[model_name]['startup_command']
-    container_id = MODEL_CONFIG[model_name]['docker_id']
+    container_id = MODEL_CONFIG[model_name]['docker_image']
     docker_scripts = render(
         DOCKER_TEMPLATE,
         together_home_dir=home_dir,

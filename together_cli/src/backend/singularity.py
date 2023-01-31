@@ -13,7 +13,7 @@ singularity run --nv \
 --bind {{TOGETHER_HOME_DIR}}/hf:/hf  \
 --bind {{TOGETHER_DATA_DIR}}/scratch:/scratch \
 {{TOGETHER_DATA_DIR}}/images/{{CONTAINER_ID}} \
-/usr/local/bin/together-node start --owner {{OWNER}} --name {{NODE_NAME}} --worker.model {{WORKER_MODEL_NAME}} --datadir /host_together_home --worker.model_dir /home/user/.together/models/ --worker.env "HF_HOME=/hf" --worker.mode local-service --worker.group.alloc each --worker.command {{STARTUP_COMMAND}} {{MODEL_TYPE}} {{TAGS}} {{HTTP_PORT}} {{WS_PORT}} --computer.api {{MATCHMAKER_ADDR}}
+/usr/local/bin/together-node start {{OWNER}} --name {{NODE_NAME}} --worker.model {{WORKER_MODEL_NAME}} --datadir /host_together_home --worker.model_dir /home/user/.together/models/ --worker.env "HF_HOME=/hf" --worker.mode local-service --worker.group.alloc each --worker.command {{STARTUP_COMMAND}} {{MODEL_TYPE}} {{TAGS}} {{HTTP_PORT}} {{WS_PORT}} --computer.api {{MATCHMAKER_ADDR}}
 """
 
 def generate_singularity_script(
@@ -30,8 +30,10 @@ def generate_singularity_script(
     model_type=""
     if 'model_type' in MODEL_CONFIG[model_name]:
         model_type = f"--worker.model_type {MODEL_CONFIG[model_name]['model_type']}"
-    if tags!="":
+    if tags and tags!="":
         tags = "--worker.tags " + tags
+    if owner and owner!="":
+        owner="--owner " + owner
     http_port_env = f"{port}"
     ws_port_env = f"{port+1}"
     http_port = f"--jsonrpc.http.port {port}"

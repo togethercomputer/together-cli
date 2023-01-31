@@ -130,6 +130,5 @@ def serve_model(
     else:
         logger.info(f"Submission script is generated as follows:{submission_script}")
     # register into local database
-    
 def compose_start_command():
     pass
