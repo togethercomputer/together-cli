@@ -5,6 +5,7 @@ from typing import Optional
 from together_cli.src.core.instances import pprint_instances
 from together_cli.src.model import serve_model
 from together_cli.src.system import check_binary_exists, check_folders, check_lockable_drive
+from together_cli.src.core.models import pprint_models
 
 app = typer.Typer()
 home_dir = os.path.expanduser("~")
@@ -108,14 +109,18 @@ def serve(
 
 
 @app.command()
-def list():
-    pprint_instances()
+def list(entity: str):
+    if entity == "jobs":
+        pprint_instances()
+    elif entity == "models":
+        pprint_models()
+    else:
+        print("[ERROR] Unknown: ", entity)
 
 
 @app.command()
 def main():
     print("TOMA")
-
 
 @app.command()
 def logs(

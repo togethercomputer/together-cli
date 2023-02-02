@@ -28,7 +28,9 @@ def persist_instance(
     if os.path.exists(os.path.join(default_together_home, "instances.json")):
         with open(os.path.join(default_together_home, "instances.json"), "r") as f:
             instances = json.load(f)
-    
+    if use_docker and cluster=='baremetal':
+        duration="N/a"
+        gpus = os.environ.get("CUDA_VISIBLE_DEVICES", "all")
     instances.append({
         "node_name": node_name,
         "job_id": job_id,
