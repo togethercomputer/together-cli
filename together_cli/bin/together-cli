@@ -123,16 +123,12 @@ def main():
     print("TOMA")
 
 @app.command()
-def logs(
-        node_name: str = typer.Option(..., prompt="What's the node name?")
-    ):
+def logs(node_name: str):
     fetch_logs(node_name)
 
 @app.command()
-def stop(
-        instance_name: str = typer.Option(...,prompt="What's the node name?")
-    ):
-    shutdown_instance(instance_name)
+def stop(node_name: str):
+    shutdown_instance(node_name)
 
 if __name__ == "__main__":
     app()

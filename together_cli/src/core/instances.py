@@ -32,28 +32,52 @@ def persist_instance(
     if use_docker and cluster=='baremetal':
         duration="N/a"
         gpus = os.environ.get("CUDA_VISIBLE_DEVICES", "all")
-    instances.append({
-        "node_name": node_name,
-        "job_id": job_id,
-        "cluster": cluster,
-        "model_name": model_name,
-        "home_dir": home_dir,
-        "data_dir": data_dir,
-        "queue_name": queue_name,
-        "tags": tags,
-        "use_docker": use_docker,
-        "use_singularity": use_singularity,
-        "account": account,
-        "node_list": node_list,
-        "gpus": gpus,
-        "port": port,
-        "duration": duration,
-        "job_id": job_id,
-        "status": "running",
-        "started_at": str(datetime.now()),
-        "virtualization": virtualization,
-    })
-
+    
+    # if node_name does not exist, add it
+    if not any([instance["node_name"] == node_name for instance in instances]):
+        instances.append({
+            "node_name": node_name,
+            "job_id": job_id,
+            "cluster": cluster,
+            "model_name": model_name,
+            "home_dir": home_dir,
+            "data_dir": data_dir,
+            "queue_name": queue_name,
+            "tags": tags,
+            "use_docker": use_docker,
+            "use_singularity": use_singularity,
+            "account": account,
+            "node_list": node_list,
+            "gpus": gpus,
+            "port": port,
+            "duration": duration,
+            "job_id": job_id,
+            "status": "running",
+            "started_at": str(datetime.now()),
+            "virtualization": virtualization,
+        })
+    else:
+        # if node_name exists, update it
+        for instance in instances:
+            if instance["node_name"] == node_name:
+                instance["job_id"] = job_id
+                instance["cluster"] = cluster
+                instance["model_name"] = model_name
+                instance["home_dir"] = home_dir
+                instance["data_dir"] = data_dir
+                instance["queue_name"] = queue_name
+                instance["tags"] = tags
+                instance["use_docker"] = use_docker
+                instance["use_singularity"] = use_singularity
+                instance["account"] = account
+                instance["node_list"] = node_list
+                instance["gpus"] = gpus
+                instance["port"] = port
+                instance["duration"] = duration
+                instance["job_id"] = job_id
+                instance["status"] = "running"
+                instance["started_at"] = str(datetime.now())
+                instance["virtualization"] = virtualization
     with open(os.path.join(default_together_home, "instances.json"), "w+") as f:
         json.dump(instances, f, indent=4)
 
@@ -116,11 +140,15 @@ def shutdown_instance(node_name: str):
     if len(instance) == 0:
         raise Exception("Instance not found")
     instance = instance[0]
-    print(instance)
     if instance["cluster"] == "baremetal" and instance['virtualization'] == 'docker':
         os.system(f"docker stop {instance['job_id']}")
     # update instance.json
-    
+    for instance in instances:
+        if instance["node_name"] == node_name:
+            instance["status"] = "stopped"
+    with open(os.path.join(default_together_home, "instances.json"), "w+") as f:
+        json.dump(instances, f, indent=4)
+
 def fetch_logs(node_name: str):
     default_together_home = os.path.join(os.path.expanduser("~"), "together")
     # read instances.json
@@ -131,6 +159,8 @@ def fetch_logs(node_name: str):
     if len(instance) == 0:
         raise Exception("Instance not found")
     instance = instance[0]
+    if instance["status"] != "running":
+        raise Exception("Instance not running")
     job_id = instance["job_id"]
     # now try to fetch logs
     ## case 1: baremetal docker, run docker logs {job_id}
