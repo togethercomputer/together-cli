@@ -63,7 +63,7 @@ def serve_model(
     run_command = None
     if use_docker:
         from together_cli.src.backend.docker import generate_docker_script
-        run_command = generate_docker_script(
+        run_command, node_name = generate_docker_script(
             home_dir=home_dir,
             data_dir=data_dir,
             model_name=model_name,
@@ -75,7 +75,7 @@ def serve_model(
         )
     elif use_singularity:
         from together_cli.src.backend.singularity import generate_singularity_script
-        run_command = generate_singularity_script(
+        run_command, node_name = generate_singularity_script(
             home_dir=home_dir,
             data_dir=data_dir,
             model_name=model_name,
@@ -111,7 +111,9 @@ def serve_model(
             job_id = output
         if cluster == "slurm":
             job_id = output.split(" ")[-1]
+        # register into local database
         persist_instance(
+            node_name=node_name,
             model_name=model_name,
             data_dir=data_dir,
             cluster=cluster,
@@ -129,6 +131,7 @@ def serve_model(
         )
     else:
         logger.info(f"Submission script is generated as follows:{submission_script}")
-    # register into local database
+    
+
 def compose_start_command():
     pass

@@ -43,16 +43,13 @@ def check_lockable_drive(dir):
     with timeout(3):
         f = open(lock_file, "w")
         try:
-            print("Trying to lock")
             fcntl.flock(f.fileno(), fcntl.LOCK_EX)
             os.remove(lock_file)
-            print("Lockable!")
             return True
         except InterruptedError:
             # Catch the exception raised by the handler
             # If we weren't raising an exception, flock would automatically retry on signals
             # remove lock file
-            print("Not lockable!")
             os.remove(lock_file)
             return False
     return False

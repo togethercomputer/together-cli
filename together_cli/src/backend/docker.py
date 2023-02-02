@@ -61,4 +61,4 @@ def generate_docker_script(
             logger.warning("You are running together-cli in non-cluster mode, and you don't have CUDA_VISIBLE_DEVICES set, will enable all GPUs by default.")
         cuda_visible_devices = os.environ.get('CUDA_VISIBLE_DEVICES','all')
         docker_scripts = docker_scripts.replace("$CUDA_VISIBLE_DEVICES", cuda_visible_devices)
-    return docker_scripts
+    return docker_scripts, node_name

@@ -5,6 +5,7 @@ from datetime import datetime
 from together_cli.src.utility import console
 
 def persist_instance(
+    node_name: str,
     cluster:str,
     model_name: str,
     home_dir:str,
@@ -29,6 +30,7 @@ def persist_instance(
             instances = json.load(f)
     
     instances.append({
+        "node_name": node_name,
         "job_id": job_id,
         "cluster": cluster,
         "model_name": model_name,
@@ -44,7 +46,7 @@ def persist_instance(
         "port": port,
         "duration": duration,
         "job_id": job_id,
-        "status": "pending",
+        "status": "running",
         "started_at": str(datetime.now()),
     })
 
@@ -62,6 +64,7 @@ def pprint_instances():
             instances = json.load(f)
     
     table = Table(show_header=True, header_style="bold", title="Instances")
+    table.add_column("Node Name", style="dim")
     table.add_column("Job ID", style="dim")
     table.add_column("Cluster", style="dim")
     table.add_column("Model", style="dim")
@@ -75,6 +78,7 @@ def pprint_instances():
 
     for instance in instances:
         table.add_row(
+            str(instance["node_name"]),
             str(instance["job_id"]),
             str(instance["cluster"]),
             str(instance["model_name"]),

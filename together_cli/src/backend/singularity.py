@@ -57,4 +57,4 @@ def generate_singularity_script(
         http_port_env = http_port_env,
         ws_port_env = ws_port_env,
         owner=owner,
-    )
+    ), node_name

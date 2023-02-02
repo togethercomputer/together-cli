@@ -1,13 +1,14 @@
 import os
 import sys
+import json
 import shlex
 import random
 import string
 import requests
 import subprocess
 from loguru import logger
-from rich.progress import Progress
 from rich.console import Console
+from rich.progress import Progress
 
 console = Console()
 
@@ -52,4 +53,21 @@ def run_command_in_foreground(cmd: str):
 
 
 def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
-   return ''.join(random.choice(chars) for _ in range(size))
+    # reads from together home
+    default_together_home = os.path.join(os.path.expanduser("~"), "together")
+    reusable_id = None
+    instances = []
+    if not os.path.exists(default_together_home):
+        os.makedirs(default_together_home)
+    if os.path.exists(os.path.join(default_together_home, "instances.json")):
+        with open(os.path.join(default_together_home, "instances.json"), "r") as f:
+            instances = json.load(f)
+
+    # find the first stopped instance
+    stopped_instance = [instance for instance in instances if instance["status"] == "stopped"]
+    if len(stopped_instance) > 0:
+        reusable_id = stopped_instance[0]["node_name"]
+    if reusable_id is None:
+        return ''.join(random.choice(chars) for _ in range(size))
+    else:
+        return reusable_id

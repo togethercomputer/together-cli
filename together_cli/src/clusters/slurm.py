@@ -18,7 +18,7 @@ def generate_slurm_script(
     node_list: str = None,
     duration: str = None
 ):
-    heads_str = generate_slurm_heads(
+    heads_str, node_name = generate_slurm_heads(
         model_name=model_name,
         data_dir=data_dir,
         account=account,
@@ -31,7 +31,7 @@ def generate_slurm_script(
         SLURM_TEMPLATES, 
         slurm_head=heads_str,
         modules = f"module load {modules}" if modules is not None else "",
-    )
+    ), node_name
 
 
 def generate_slurm_heads(
