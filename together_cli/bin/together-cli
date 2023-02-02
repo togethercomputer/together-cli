@@ -2,7 +2,7 @@
 import os
 import typer
 from typing import Optional
-from together_cli.src.core.instances import pprint_instances
+from together_cli.src.core.instances import pprint_instances, shutdown_instance, fetch_logs
 from together_cli.src.model import serve_model
 from together_cli.src.system import check_binary_exists, check_folders, check_lockable_drive
 from together_cli.src.core.models import pprint_models
@@ -124,9 +124,15 @@ def main():
 
 @app.command()
 def logs(
-    instance_id: str = typer.Option(..., prompt="What's the ID of the instance you want to inspect?")):
-    pass
+        node_name: str = typer.Option(..., prompt="What's the node name?")
+    ):
+    fetch_logs(node_name)
 
+@app.command()
+def stop(
+        instance_name: str = typer.Option(...,prompt="What's the node name?")
+    ):
+    shutdown_instance(instance_name)
 
 if __name__ == "__main__":
     app()

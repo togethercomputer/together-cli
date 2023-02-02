@@ -19,7 +19,8 @@ def persist_instance(
     gpus: str,
     port: int,
     duration: str,
-    job_id: str
+    job_id: str,
+    virtualization: str,
 ):
     default_together_home = os.path.join(os.path.expanduser("~"), "together")
     instances = []
@@ -50,6 +51,7 @@ def persist_instance(
         "job_id": job_id,
         "status": "running",
         "started_at": str(datetime.now()),
+        "virtualization": virtualization,
     })
 
     with open(os.path.join(default_together_home, "instances.json"), "w+") as f:
@@ -77,11 +79,16 @@ def pprint_instances():
     table.add_column("Tags", style="dim")
     table.add_column("GPU", style="dim")
     table.add_column("Port", style="dim")
+    table.add_column("Virtualization", style="dim")
 
     for instance in instances:
+        if len(str(instance["job_id"]))>14:
+            job_id = str(instance["job_id"])[:5]+"..."+str(instance["job_id"])[-5:]
+        else:
+            job_id = str(instance["job_id"])
         table.add_row(
             str(instance["node_name"]),
-            str(instance["job_id"]),
+            job_id,
             str(instance["cluster"]),
             str(instance["model_name"]),
             str(instance["status"]),
@@ -91,22 +98,40 @@ def pprint_instances():
             str(instance["tags"]) if "tags" in instance else "N/A",
             str(instance["gpus"]) if "gpus" in instance else "N/A",
             str(instance["port"]) if "port" in instance else "N/A",
+            str(instance["virtualization"]) if "virtualization" in instance else "N/A",
         )
     console.print(table)
 
-def shutdown_instance(job_id: str):
-    pass
+def shutdown_instance(node_name: str):
+    default_together_home = os.path.join(os.path.expanduser("~"), "together")
+    instances = []
+    if os.path.exists(os.path.join(default_together_home, "instances.json")):
+        with open(os.path.join(default_together_home, "instances.json"), "r") as f:
+            instances = json.load(f)
+    else:
+        raise Exception("No instances found")
+    
+    instance = [instance for instance in instances if instance["node_name"] == node_name]
 
-def fetch_logs(job_id: str):
+    if len(instance) == 0:
+        raise Exception("Instance not found")
+    instance = instance[0]
+    print(instance)
+    if instance["cluster"] == "baremetal" and instance['virtualization'] == 'docker':
+        os.system(f"docker stop {instance['job_id']}")
+    # update instance.json
+    
+def fetch_logs(node_name: str):
     default_together_home = os.path.join(os.path.expanduser("~"), "together")
     # read instances.json
     with open(os.path.join(default_together_home, "instances.json"), "r") as f:
         instances = json.load(f)
     # find instance with job_id
-    instance = [instance for instance in instances if instance["job_id"] == job_id]
+    instance = [instance for instance in instances if instance["node_name"] == node_name]
     if len(instance) == 0:
         raise Exception("Instance not found")
     instance = instance[0]
+    job_id = instance["job_id"]
     # now try to fetch logs
     ## case 1: baremetal docker, run docker logs {job_id}
     if instance["use_docker"] and instance["cluster"] == "baremetal":

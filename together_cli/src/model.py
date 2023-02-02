@@ -128,6 +128,7 @@ def serve_model(
             duration=duration,
             gpus=gpus,
             job_id=job_id,
+            virtualization="docker" if use_docker else "singularity",
         )
     else:
         logger.info(f"Submission script is generated as follows:{submission_script}")
