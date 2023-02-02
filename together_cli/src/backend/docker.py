@@ -5,7 +5,6 @@ from together_cli.src.constants import MODEL_CONFIG
 from together_cli.src.utility import id_generator
 
 DOCKER_TEMPLATE="""
-docker pull {{CONTAINER_ID}}
 docker run {{DAEMON_MODE}} --rm --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=$CUDA_VISIBLE_DEVICES --ipc=host \
 -e NUM_WORKERS=auto \
 -v {{TOGETHER_DATA_DIR}}:/home/user/.together \
