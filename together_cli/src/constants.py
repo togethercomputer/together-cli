@@ -46,6 +46,16 @@ MODEL_CONFIG = {
         "model_type": "",
         "startup_command":"/app/serve_neoxt.sh",
         "together_name":"together/gpt-neoxT-20B-chat-latest"
+    },
+    'h3-125m':{
+        "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/h3-0.0.1.sif",
+        "weights_url":"https://together-singularity.s3.us-west-2.amazonaws.com/H3-125M.tar.gz",
+        "worker_model":"together/h3-125m",
+        "docker_image": "xzyaoi/h3:0.0.1",
+        "sif_name": "h3-0.0.1.sif",
+        "model_type": "",
+        "startup_command":"/workspace/H3/serve.sh",
+        "together_name":"together/h3-125m"
     }
 }
 
