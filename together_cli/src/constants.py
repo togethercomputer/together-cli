@@ -54,8 +54,38 @@ MODEL_CONFIG = {
         "docker_image": "xzyaoi/h3:0.0.1",
         "sif_name": "h3-0.0.1.sif",
         "model_type": "",
-        "startup_command":"/workspace/H3/serve.sh",
+        "startup_command":"/workspace/H3/serve_125m.sh",
         "together_name":"together/h3-125m"
+    },
+    'h3-2.7b':{
+        "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/h3-0.0.1.sif",
+        "weights_url":"https://together-singularity.s3.us-west-2.amazonaws.com/H3-2.7B.tar.gz",
+        "worker_model":"together/h3-2.7b",
+        "docker_image": "xzyaoi/h3:0.0.1",
+        "sif_name": "h3-0.0.1.sif",
+        "model_type": "",
+        "startup_command":"/workspace/H3/serve_2.7b.sh",
+        "together_name":"together/h3-2.7b"
+    },
+    'h3-1.3b':{
+        "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/h3-0.0.1.sif",
+        "weights_url":"https://together-singularity.s3.us-west-2.amazonaws.com/H3-1.3B.tar.gz",
+        "worker_model":"together/h3-1.3b",
+        "docker_image": "xzyaoi/h3:0.0.1",
+        "sif_name": "h3-0.0.1.sif",
+        "model_type": "",
+        "startup_command":"/workspace/H3/serve_1.3b.sh",
+        "together_name":"together/h3-1.3b"
+    },
+    'h3-355m':{
+        "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/h3-0.0.1.sif",
+        "weights_url":"https://together-singularity.s3.us-west-2.amazonaws.com/H3-355M.tar.gz",
+        "worker_model":"together/h3-355m",
+        "docker_image": "xzyaoi/h3:0.0.1",
+        "sif_name": "h3-0.0.1.sif",
+        "model_type": "",
+        "startup_command":"/workspace/H3/serve_355m.sh",
+        "together_name":"together/h3-355m"
     }
 }
 
