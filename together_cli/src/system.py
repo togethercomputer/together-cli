@@ -28,9 +28,7 @@ def timeout(seconds):
         # an exception to stop it
         # This exception will propagate on the main thread, make sure you're calling flock there
         raise InterruptedError
-
     original_handler = signal.signal(signal.SIGALRM, timeout_handler)
-
     try:
         signal.alarm(seconds)
         yield
@@ -52,4 +50,3 @@ def check_lockable_drive(dir):
             # remove lock file
             os.remove(lock_file)
             return False
-    return False

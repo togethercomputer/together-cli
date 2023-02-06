@@ -7,6 +7,7 @@ def dispatch(
         cluster_type:str,
         model_name: str,
         data_dir: str,
+        node_name: str,
     ):
     output = ""
     scripts_dir = os.path.join(data_dir, "scripts")
@@ -36,4 +37,8 @@ def dispatch(
         output = completed_process.stdout
         logger.info(f"{output}")
         logger.info(f"{completed_process.stderr}")
+    
+    if cluster_type == 'baremetal':
+        logger.info(f"Together-node is now running in the docker container {output}")
+        logger.info(f"Use together-cli logs {node_name} to inspect its logs")
     return output.decode("utf-8")

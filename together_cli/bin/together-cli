@@ -6,12 +6,13 @@ from together_cli.src.core.instances import pprint_instances, shutdown_instance,
 from together_cli.src.model import serve_model
 from together_cli.src.system import check_binary_exists, check_folders, check_lockable_drive
 from together_cli.src.core.models import pprint_models
+from together_cli.src.core.config import read_config
 
 app = typer.Typer()
 home_dir = os.path.expanduser("~")
 default_together_home = os.path.join(home_dir, "together")
-
-
+config_path = os.path.join(default_together_home, "config.json")
+config = read_config(config_path)
 @app.command()
 def check():
     is_slurm = check_binary_exists("sinfo")
@@ -26,15 +27,18 @@ def check():
 def serve(
         # required arguments
         model: str = typer.Option(...,
-                                  prompt="What's the model name you want to serve?"),
+            prompt="What's the model name you want to serve?"
+        ),
         home_dir: str = typer.Option(
-            default_together_home, help="The home directory for Together? It cannot be on an NFS drive."),
+            config['home_dir'], help="The home directory for Together? It cannot be on an NFS drive."
+        ),
         data_dir: str = typer.Option(
-            ..., prompt="The directory you want to store model weights? It could be on an NFS drive."),
-
+            config['data_dir'], prompt="The directory you want to store model weights? It could be on an NFS drive."
+        ),
         # optional, but suggested arguments
         gpus: str = typer.Option(
-            None, help="GPU Specifiers (e.g., titanrtx:1), required if you are not using baremetal ndoes"),
+            None, help="GPU Specifiers (e.g., titanrtx:1), required if you are not using baremetal ndoes"
+        ),
         queue: str = typer.Option(None, help="Queue name - default is None"),
         singularity: bool = typer.Option(
             False, help="Use singularity to serve the model"),
@@ -50,7 +54,7 @@ def serve(
         matchmaker_addr: str = typer.Option(
                 "wss://api.together.xyz/websocket", help="Global Matchmaker address - leave it as it is in most cases"),
         port: int = typer.Option(
-            8092, help="Port number - default is 8092-8093. In case of conflict, change it to a different number, increase by 2"),
+            config['last_used_port']+2, help="Port number - default is 8092-8093. In case of conflict, change it to a different number, increase by 2"),
         node_list: str = typer.Option(
                 None, help="Node list - default is None"),
         cluster: str = typer.Option(
@@ -118,8 +122,12 @@ def list(entity: str):
         print("[ERROR] Unknown: ", entity)
 
 @app.command()
+def status():
+    pprint_instances()
+
+@app.command()
 def main():
-    print("TOMA")
+    print("Together CLI")
 
 @app.command()
 def logs(node_name: str):

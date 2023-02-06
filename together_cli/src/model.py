@@ -5,6 +5,10 @@ from together_cli.src.constants import MODEL_CONFIG
 from together_cli.src.script_composer import makeup_slurm_scripts
 from together_cli.src.utility import run_command_in_foreground, remote_download
 from together_cli.src.core.instances import persist_instance
+from together_cli.src.core.config import write_config
+
+default_together_home = os.path.join(os.path.expanduser("~"), "together")
+config_path = os.path.join(default_together_home, "config.json")
 
 def download_model_and_weights(
     model_name: str,
@@ -105,7 +109,12 @@ def serve_model(
     else:
         raise ValueError(f"Unknown cluster type {cluster}")
     if not dry_run:
-        output = dispatch(submission_script=submission_script, model_name=model_name, data_dir=data_dir, cluster_type=cluster)
+        output = dispatch(
+            submission_script=submission_script,
+            model_name=model_name,
+            data_dir=data_dir,
+            cluster_type=cluster
+        )
         job_id = output
         if cluster == "baremetal" and use_docker:
             job_id = output
@@ -130,6 +139,13 @@ def serve_model(
             job_id=job_id,
             virtualization="docker" if use_docker else "singularity",
         )
+        write_config({
+            "data_dir": data_dir,
+            "home_dir": home_dir,
+            "owner_addr": owner,
+            "last_used_port": port,
+        }, config_path)
+        
     else:
         logger.info(f"Submission script is generated as follows:{submission_script}")
     
