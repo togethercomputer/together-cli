@@ -46,6 +46,7 @@ def download_model_and_weights(
             run_command_in_foreground(f"rm {os.path.join(weights_dir, model_config['weights_url'].split('/')[-1])}")
         else:
             raise ValueError("Unknown weights source.")
+            
 def serve_model(
         model_name: str,
         queue_name: str,
@@ -122,7 +123,8 @@ def serve_model(
             submission_script=submission_script,
             model_name=model_name,
             data_dir=data_dir,
-            cluster_type=cluster
+            cluster_type=cluster,
+            node_name=node_name,
         )
         job_id = output
         if cluster == "baremetal" and use_docker:

@@ -41,7 +41,7 @@ def remote_download(remote_url: str, local_path: str):
                 # iterate over every chunk and calculate % of total
                 for i, chunk in enumerate(r.iter_content(chunk_size=chunk_size)):
                     file.write(chunk)
-                    description = f"Downloading {filename} {i * chunk_size/1024/1024/1024:.2f}/{total_size/1024/1024/1024:.2f} GB"
+                    description = f"Downloading <{filename}> {i * chunk_size/1024/1024/1024:.2f}/{total_size/1024/1024/1024:.2f} GB"
                     progress.update(
                         task,
                         completed=i * chunk_size,
