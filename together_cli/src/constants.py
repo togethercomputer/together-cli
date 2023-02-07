@@ -125,6 +125,7 @@ MODEL_CONFIG = {
     },
     "glm-130b":{
         "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/glm.sif",
+        "weights_url":"https://together-singularity.s3.us-west-2.amazonaws.com/glm-130b.tar.gz",
         "worker_model":"glm-130b",
         "docker_image": "xzyaoi/glm:0.0.1",
         "sif_name": "glm.sif",
