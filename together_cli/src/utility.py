@@ -26,8 +26,8 @@ def remote_download(remote_url: str, local_path: str):
     local_path = os.path.join(local_path, filename)
     # check if the file already exists
     if os.path.exists(local_path):
-        logger.info(f"File {filename} already exists, skipping download.")
-        logger.info(f"If you want to download the file again, please delete the file at {local_path} first.")
+        # logger.info(f"File {filename} already exists, skipping download.")
+        # logger.info(f"If you want to download the file again, please delete the file at {local_path} first.")
         return
 
     with Progress(transient=False) as progress:
