@@ -5,7 +5,7 @@ setup(
     author="togethercomputer",
     author_email="support@together.xyz",
     description="Together cli is a tool to help you join together computer",
-    version='0.0.44',
+    version='0.0.49',
     scripts=["together_cli/bin/together-cli"],
     package_dir={'together_cli': 'together_cli'},
     packages=find_packages(),
@@ -14,5 +14,6 @@ setup(
         "requests",
         "rich",
         "loguru",
+        "huggingface-hub"
     ]
 )

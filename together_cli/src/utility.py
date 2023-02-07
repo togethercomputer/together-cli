@@ -9,8 +9,16 @@ import subprocess
 from loguru import logger
 from rich.console import Console
 from rich.progress import Progress
-
+from huggingface_hub import list_repo_files
 console = Console()
+
+def download_hf_files(hf_name: str, local_path: str):
+    all_files = list_repo_files(hf_name)
+    urls = [f"https://huggingface.co/{hf_name}/resolve/main/{file_name}" for file_name in all_files]
+    if not os.path.exists(local_path):
+        os.makedirs(local_path)
+    for url in urls:
+        remote_download(url, local_path)
 
 def remote_download(remote_url: str, local_path: str):
     logger.info(f"Downloading file from {remote_url} to {local_path} ...")

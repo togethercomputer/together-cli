@@ -87,6 +87,33 @@ MODEL_CONFIG = {
         "startup_command":"/home/user/serve.sh",
         "together_name":"StableDiffusion"
     },
+    "flan-t5-xxl":{
+        "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/native_hf_model.sif",
+        "worker_model":"flan-t5-xxl",
+        "docker_image": "xzyaoi/native_hf_models:0.0.1",
+        "sif_name": "flan-t5-xxl.sif",
+        "from_hf":"google/flan-t5-xxl",
+        "startup_command": "/app/serve_flant5xxl.sh",
+        "together_name":"together/flan-t5-xxl"
+    },
+    "opt-iml-30b":{
+        "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/native_hf_model.sif",
+        "worker_model":"opt-iml-30b",
+        "docker_image": "xzyaoi/native_hf_models:0.0.1",
+        "sif_name": "native_hf_model.sif",
+        "from_hf":"facebook/opt-iml-30b",
+        "startup_command": "/app/serve_opt_iml_30b.sh",
+        "together_name":"together/opt-iml-30b"
+    },
+    "codegen-16b-mono":{
+        "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/native_hf_model.sif",
+        "worker_model":"codegen-16b-mono",
+        "docker_image": "xzyaoi/native_hf_models:0.0.1",
+        "sif_name": "native_hf_model.sif",
+        "from_hf":"facebook/codegen-16b-mono",
+        "startup_command": "/app/serve_codegen_16b_mono.sh",
+        "together_name":"together/codegen-16b-mono"
+    },
 }
 
 BINARY_CONFIG = {

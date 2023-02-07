@@ -13,6 +13,7 @@ home_dir = os.path.expanduser("~")
 default_together_home = os.path.join(home_dir, "together")
 config_path = os.path.join(default_together_home, "config.json")
 config = read_config(config_path)
+
 @app.command()
 def check():
     is_slurm = check_binary_exists("sinfo")

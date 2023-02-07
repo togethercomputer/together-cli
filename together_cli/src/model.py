@@ -3,7 +3,7 @@ from loguru import logger
 from together_cli.src.clusters import dispatch
 from together_cli.src.constants import MODEL_CONFIG
 from together_cli.src.script_composer import makeup_slurm_scripts
-from together_cli.src.utility import run_command_in_foreground, remote_download
+from together_cli.src.utility import run_command_in_foreground, remote_download, download_hf_files
 from together_cli.src.core.instances import persist_instance
 from together_cli.src.core.config import write_config
 
@@ -29,14 +29,23 @@ def download_model_and_weights(
         # download the singularity container
         remote_download(model_config["singularity_url"], images_dir)
     # weights need to be downloaded anyway
-    if not weights_already_exist and "weights_url" in model_config:
-        os.makedirs(weights_dir)
-        remote_download(model_config["weights_url"], weights_dir)
-        # decompress the weights
-        logger.info(f"Decompressing the weights to {weights_dir}...")
-        run_command_in_foreground(f"tar -xvf {os.path.join(weights_dir, model_config['weights_url'].split('/')[-1])} -C {weights_dir}")
-        run_command_in_foreground(f"rm {os.path.join(weights_dir, model_config['weights_url'].split('/')[-1])}")
-    
+    if 'from_hf' in model_config:
+        download_hf_files(
+            model_config['from_hf'],
+            os.path.join(weights_dir, model_name)
+        )
+    if not weights_already_exist:
+        if 'from_hf' in model_config:
+            pass
+        elif "weights_url" in model_config:
+            os.makedirs(weights_dir)
+            remote_download(model_config["weights_url"], weights_dir)
+            # decompress the weights
+            logger.info(f"Decompressing the weights to {weights_dir}...")
+            run_command_in_foreground(f"tar -xvf {os.path.join(weights_dir, model_config['weights_url'].split('/')[-1])} -C {weights_dir}")
+            run_command_in_foreground(f"rm {os.path.join(weights_dir, model_config['weights_url'].split('/')[-1])}")
+        else:
+            raise ValueError("Unknown weights source.")
 def serve_model(
         model_name: str,
         queue_name: str,
