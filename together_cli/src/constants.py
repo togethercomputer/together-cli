@@ -123,6 +123,14 @@ MODEL_CONFIG = {
         "startup_command": "/app/serve_chip_20b.sh",
         "together_name":"together/chip_20b_instruct_alpha"
     },
+    "glm-130b":{
+        "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/glm.sif",
+        "worker_model":"glm-130b",
+        "docker_image": "xzyaoi/glm:0.0.1",
+        "sif_name": "glm.sif",
+        "startup_command": "/app/start_dist_glm.sh",
+        "together_name":"together/glm-130b"
+    },
 }
 
 BINARY_CONFIG = {
