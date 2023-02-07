@@ -21,7 +21,7 @@ def download_hf_files(hf_name: str, local_path: str):
         remote_download(url, local_path)
 
 def remote_download(remote_url: str, local_path: str):
-    logger.info(f"Downloading file from {remote_url} to {local_path} ...")
+    print(f"Downloading file from {remote_url} to {local_path} ...")
     filename = remote_url.split('/')[-1]
     local_path = os.path.join(local_path, filename)
     # check if the file already exists

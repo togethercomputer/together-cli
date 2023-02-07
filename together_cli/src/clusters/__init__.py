@@ -39,6 +39,6 @@ def dispatch(
         logger.info(f"{completed_process.stderr}")
     
     if cluster_type == 'baremetal':
-        logger.info(f"Together-node is now running in the docker container {output}")
-        logger.info(f"Use together-cli logs {node_name} to inspect its logs")
+        logger.info(f"Together-node is now running in the docker container `{output}`")
+        logger.info(f"Use `together-cli logs {node_name}` to inspect its logs")
     return output.decode("utf-8")

@@ -7,6 +7,8 @@ from together_cli.src.utility import id_generator
 DOCKER_TEMPLATE="""
 docker run {{DAEMON_MODE}} --rm --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=$CUDA_VISIBLE_DEVICES --ipc=host \
 -e NUM_WORKERS=auto \
+-e COORD_HTTP_PORT={{HTTP_PORT_ENV}} \
+-e COORD_WS_PORT={{WS_PORT_ENV}} \
 -v {{TOGETHER_DATA_DIR}}:/home/user/.together \
 -v {{TOGETHER_HOME_DIR}}:/host_together_home \
 -v {{TOGETHER_DATA_DIR}}/weights/{{MODEL_NAME}}:/home/user/.together/models/ \
@@ -36,6 +38,8 @@ def generate_docker_script(
         owner="--owner " + owner
     http_port = f"--jsonrpc.http.port {port}"
     ws_port = f"--jsonrpc.ws.port {port+1}"
+    http_port_env = f"{port}"
+    ws_port_env = f"{port+1}"
     startup_command = MODEL_CONFIG[model_name]['startup_command']
     container_id = MODEL_CONFIG[model_name]['docker_image']
     docker_scripts = render(
@@ -52,6 +56,8 @@ def generate_docker_script(
         node_name = node_name,
         http_port = http_port,
         ws_port = ws_port,
+        http_port_env = http_port_env,
+        ws_port_env = ws_port_env,
         daemon_mode='--detach' if daemon_mode else '',
         owner=owner,
     )

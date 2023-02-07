@@ -6,8 +6,8 @@ SINGULARITY_TEMPLAE="""
 singularity run --nv \
 --env NUM_WORKERS=auto \
 --env TEMP=/scratch \
---env COORD_HTTP_URL={{HTTP_PORT_ENV}} \
---env COORD_WS_URL={{WS_PORT_ENV}} \
+--env COORD_HTTP_PORT={{HTTP_PORT_ENV}} \
+--env COORD_WS_PORT={{WS_PORT_ENV}} \
 --bind {{TOGETHER_HOME_DIR}}:/host_together_home \
 --bind {{TOGETHER_DATA_DIR}}/weights/{{MODEL_NAME}}:/home/user/.together/models/ \
 --bind {{TOGETHER_HOME_DIR}}/hf:/hf  \

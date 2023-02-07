@@ -67,7 +67,7 @@ MODEL_CONFIG = {
         "sif_name": "ft_base_ampere.sif",
         "model_type": "gptj",
         "startup_command":"/workspace/Port_FasterTransformer/serve.sh",
-        "together_name":"together/gpt-jt-6b-v1"
+        "together_name":"GPT-JT-6B-v1-tp1"
     },
     'gpt-neoxt-v0.6':{
         "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/native_hf_model.sif",
@@ -110,9 +110,18 @@ MODEL_CONFIG = {
         "worker_model":"codegen-16b-mono",
         "docker_image": "xzyaoi/native_hf_models:0.0.1",
         "sif_name": "native_hf_model.sif",
-        "from_hf":"facebook/codegen-16b-mono",
+        "from_hf":"Salesforce/codegen-16b-mono",
         "startup_command": "/app/serve_codegen_16b_mono.sh",
         "together_name":"together/codegen-16b-mono"
+    },
+    "chip-20b":{
+        "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/native_hf_model.sif",
+        "worker_model":"chip-20b",
+        "docker_image": "xzyaoi/native_hf_models:0.0.1",
+        "sif_name": "native_hf_model.sif",
+        "from_hf":"Rallio67/chip_20B_instruct_alpha",
+        "startup_command": "/app/serve_chip_20b.sh",
+        "together_name":"together/chip_20b_instruct_alpha"
     },
 }
 
