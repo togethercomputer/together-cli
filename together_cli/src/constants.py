@@ -71,7 +71,7 @@ MODEL_CONFIG = {
     },
     'gpt-neoxt-v0.6':{
         "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/native_hf_model.sif",
-        "weights_url":"https://together-singularity.s3.us-west-2.amazonaws.com/GPT-NeoXT-20B-chat-v0.6.tar.gz",
+        "weights_url":"https://together-singularity.s3.us-west-2.amazonaws.com/neoxt.tar.gz",
         "worker_model":"together/gpt-neoxT-20B-chat-0.6",
         "docker_image": "xzyaoi/native_hf_models:0.0.1",
         "sif_name": "native_hf_model.sif",
