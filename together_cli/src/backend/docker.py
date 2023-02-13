@@ -14,7 +14,7 @@ docker run {{DAEMON_MODE}} --rm --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=$CUDA
 -v {{TOGETHER_DATA_DIR}}/weights/{{MODEL_NAME}}:/home/user/.together/models/ \
 -v {{TOGETHER_HOME_DIR}}/hf:/hf \
 -v {{TOGETHER_DATA_DIR}}/scratch:/scratch \
-{{CONTAINER_ID}} /usr/local/bin/together-node start {{OWNER}} --name {{NODE_NAME}}  --worker.model {{WORKER_MODEL_NAME}} --datadir /host_together_home --worker.model_dir /home/user/.together/models/ --worker.env "HF_HOME=/hf" --worker.mode local-service --worker.group.alloc each --worker.command {{STARTUP_COMMAND}} {{TAGS}} {{MODEL_TYPE}} {{HTTP_PORT}} {{WS_PORT}} --computer.api {{MATCHMAKER_ADDR}}
+{{CONTAINER_ID}} /usr/local/bin/together-node start {{OWNER}} --name {{NODE_NAME}}  --worker.model {{WORKER_MODEL_NAME}} --datadir /host_together_home --worker.model_dir /home/user/.together/models/ --worker.env "HF_HOME=/hf" --worker.mode local-service --worker.group.alloc each  --worker.command {{STARTUP_COMMAND}} {{TAGS}} {{MODEL_TYPE}} {{HTTP_PORT}} {{WS_PORT}} --computer.api {{MATCHMAKER_ADDR}} --worker.service {{SERVICE_NAME}}
 """
 
 def generate_docker_script(
@@ -29,6 +29,7 @@ def generate_docker_script(
 ):
     node_name = id_generator(size=10)
     worker_model_name = MODEL_CONFIG[model_name]['worker_model']
+    service_name = MODEL_CONFIG[model_name]['together_name']
     model_type=""
     if 'model_type' in MODEL_CONFIG[model_name]:
         model_type = f"--worker.model_type {MODEL_CONFIG[model_name]['model_type']}"
@@ -60,6 +61,7 @@ def generate_docker_script(
         ws_port_env = ws_port_env,
         daemon_mode='--detach' if daemon_mode else '',
         owner=owner,
+        service_name=service_name,
     )
     if daemon_mode:
         # meaning it is running locally, load CUDA_VISIBLE_DEVICES
