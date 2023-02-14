@@ -45,7 +45,7 @@ def download_model_and_weights(
             run_command_in_foreground(f"tar -xvf {os.path.join(weights_dir, model_config['weights_url'].split('/')[-1])} -C {weights_dir}")
             run_command_in_foreground(f"rm {os.path.join(weights_dir, model_config['weights_url'].split('/')[-1])}")
         else:
-            raise ValueError("Unknown weights source.")
+            logger.warning(f"No weights found for {model_name}. Will try to download them later.")
             
 def serve_model(
         model_name: str,

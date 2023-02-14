@@ -86,6 +86,15 @@ MODEL_CONFIG = {
         "startup_command":"/home/user/serve.sh",
         "together_name":"StableDiffusion"
     },
+    'universal-sd':{
+        "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/h3-0.0.1.sif",
+        "worker_model":"UniversalStableDiffusion",
+        "docker_image": "xzyaoi/universal-sd:0.0.1",
+        "sif_name": "usd-0.0.1.sif",
+        "model_type": "",
+        "startup_command":"/app/serve.sh",
+        "together_name":"together/universal-sd"
+    },
     "flan-t5-xxl":{
         "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/native_hf_model.sif",
         "worker_model":"flan-t5-xxl",
