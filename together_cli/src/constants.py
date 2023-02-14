@@ -91,7 +91,6 @@ MODEL_CONFIG = {
         "worker_model":"UniversalStableDiffusion",
         "docker_image": "xzyaoi/universal-sd:0.0.1",
         "sif_name": "usd-0.0.1.sif",
-        "model_type": "",
         "startup_command":"/app/serve.sh",
         "together_name":"together/universal-sd"
     },
