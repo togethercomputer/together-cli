@@ -5,7 +5,6 @@ MODEL_CONFIG = {
         "worker_model":"together/h3-125m",
         "docker_image": "xzyaoi/h3:0.0.1",
         "sif_name": "h3-0.0.1.sif",
-        "model_type": "",
         "startup_command":"/workspace/H3/serve_125m.sh",
         "together_name":"h3-125m-h3"
     },
@@ -15,7 +14,6 @@ MODEL_CONFIG = {
         "worker_model":"together/h3-2.7b",
         "docker_image": "xzyaoi/h3:0.0.1",
         "sif_name": "h3-0.0.1.sif",
-        "model_type": "",
         "startup_command":"/workspace/H3/serve_2.7b.sh",
         "together_name":"h3-2.7b-h3"
     },
@@ -35,7 +33,6 @@ MODEL_CONFIG = {
         "worker_model":"together/h3-355m",
         "docker_image": "xzyaoi/h3:0.0.1",
         "sif_name": "h3-0.0.1.sif",
-        "model_type": "",
         "startup_command":"/workspace/H3/serve_355m.sh",
         "together_name":"h3-355m-h3"
     },
