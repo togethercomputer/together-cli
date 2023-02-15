@@ -7,7 +7,7 @@ MODEL_CONFIG = {
         "sif_name": "h3-0.0.1.sif",
         "model_type": "",
         "startup_command":"/workspace/H3/serve_125m.sh",
-        "together_name":"together/h3-125m"
+        "together_name":"h3-125m-h3"
     },
     'h3-2.7b':{
         "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/h3-0.0.1.sif",
@@ -17,7 +17,7 @@ MODEL_CONFIG = {
         "sif_name": "h3-0.0.1.sif",
         "model_type": "",
         "startup_command":"/workspace/H3/serve_2.7b.sh",
-        "together_name":"together/h3-2.7b"
+        "together_name":"h3-2.7b-h3"
     },
     'h3-1.3b':{
         "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/h3-0.0.1.sif",
@@ -27,7 +27,7 @@ MODEL_CONFIG = {
         "sif_name": "h3-0.0.1.sif",
         "model_type": "",
         "startup_command":"/workspace/H3/serve_1.3b.sh",
-        "together_name":"together/h3-1.3b"
+        "together_name":"h3-1.3b-h3"
     },
     'h3-355m':{
         "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/h3-0.0.1.sif",
@@ -37,7 +37,7 @@ MODEL_CONFIG = {
         "sif_name": "h3-0.0.1.sif",
         "model_type": "",
         "startup_command":"/workspace/H3/serve_355m.sh",
-        "together_name":"together/h3-355m"
+        "together_name":"h3-355m-h3"
     },
     'opt-1.3b': {
         "singularity_url": "https://filedn.eu/lougUsdPvd1uJK2jfOYWogH/toma_models/ft_base_ampere.sif",
@@ -47,7 +47,7 @@ MODEL_CONFIG = {
         "sif_name": "ft_base_ampere.sif",
         "model_type": "gpt",
         "startup_command":"/workspace/Port_FasterTransformer/serve.sh",
-        "together_name":"opt-1.3b-tp1"
+        "together_name":"opt-1.3b-ft-tp1"
     },
     'opt-6.7b': {
         "singularity_url": "https://filedn.eu/lougUsdPvd1uJK2jfOYWogH/toma_models/ft_base_ampere.sif",
@@ -57,7 +57,7 @@ MODEL_CONFIG = {
         "worker_model":"opt-6.7b-tp1",
         "model_type": "gpt",
         "startup_command":"/workspace/Port_FasterTransformer/serve.sh",
-        "together_name":"opt-6.7b-tp1",
+        "together_name":"opt-6.7b-ft-tp1",
     },
     'gpt-jt': {
         "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/ft_base_ampere.sif",
@@ -67,24 +67,7 @@ MODEL_CONFIG = {
         "sif_name": "ft_base_ampere.sif",
         "model_type": "gptj",
         "startup_command":"/workspace/Port_FasterTransformer/serve.sh",
-        "together_name":"GPT-JT-6B-v1-tp1"
-    },
-    'gpt-neoxt-v0.6':{
-        "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/native_hf_model.sif",
-        "weights_url":"https://together-singularity.s3.us-west-2.amazonaws.com/neoxt.tar.gz",
-        "worker_model":"together/gpt-neoxT-20B-chat-0.6",
-        "docker_image": "xzyaoi/native_hf_models:0.0.2",
-        "sif_name": "native_hf_model.sif",
-        "startup_command":"/app/serve_neoxt.sh",
-        "together_name":"together/gpt-neoxT-20B-chat-0.6"
-    },
-    'stable-diffusion': {
-        "singularity_url": "https://filedn.eu/lougUsdPvd1uJK2jfOYWogH/toma_models/stablediffusion_general.sif",
-        "worker_model":"StableDiffusion",
-        "docker_image": "xzyaoi/stablediffusion:general",
-        "sif_name": "stablediffusion_general.sif",
-        "startup_command":"/home/user/serve.sh",
-        "together_name":"StableDiffusion"
+        "together_name":"gpt-jt-6b-v1-ft-tp1"
     },
     'universal-sd':{
         "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/h3-0.0.1.sif",
@@ -101,7 +84,7 @@ MODEL_CONFIG = {
         "sif_name": "flan-t5-xxl.sif",
         "from_hf":"google/flan-t5-xxl",
         "startup_command": "/app/serve_flant5xxl.sh",
-        "together_name":"together/flan-t5-xxl"
+        "together_name":"flan-t5-xxl-hf"
     },
     "opt-iml-30b":{
         "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/native_hf_model.sif",
@@ -110,7 +93,7 @@ MODEL_CONFIG = {
         "sif_name": "native_hf_model.sif",
         "from_hf":"facebook/opt-iml-30b",
         "startup_command": "/app/serve_opt_iml_30b.sh",
-        "together_name":"together/opt-iml-30b"
+        "together_name":"opt-iml-30b-hf"
     },
     "codegen-16b-mono":{
         "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/native_hf_model.sif",
@@ -119,26 +102,26 @@ MODEL_CONFIG = {
         "sif_name": "native_hf_model.sif",
         "from_hf":"Salesforce/codegen-16b-mono",
         "startup_command": "/app/serve_codegen_16b_mono.sh",
-        "together_name":"together/codegen-16b-mono"
+        "together_name":"codegen-16b-mono-hf"
     },
-    "chip-20b":{
-        "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/native_hf_model.sif",
-        "worker_model":"chip-20b",
-        "docker_image": "xzyaoi/native_hf_models:0.0.2",
-        "sif_name": "native_hf_model.sif",
-        "from_hf":"Rallio67/chip_20B_instruct_alpha",
-        "startup_command": "/app/serve_chip_20b.sh",
-        "together_name":"together/chip_20b_instruct_alpha"
-    },
-    "glm-130b":{
-        "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/glm.sif",
-        "weights_url":"https://together-singularity.s3.us-west-2.amazonaws.com/glm-130b.tar.gz",
-        "worker_model":"glm-130b",
-        "docker_image": "xzyaoi/glm:0.0.1",
-        "sif_name": "glm.sif",
-        "startup_command": "/app/start_dist_glm.sh",
-        "together_name":"together/glm-130b"
-    },
+    # "chip-20b":{
+    #     "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/native_hf_model.sif",
+    #     "worker_model":"chip-20b",
+    #     "docker_image": "xzyaoi/native_hf_models:0.0.2",
+    #     "sif_name": "native_hf_model.sif",
+    #     "from_hf":"Rallio67/chip_20B_instruct_alpha",
+    #     "startup_command": "/app/serve_chip_20b.sh",
+    #     "together_name":"together/chip_20b_instruct_alpha"
+    # },
+    # "glm-130b":{
+    #     "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/glm.sif",
+    #     "weights_url":"https://together-singularity.s3.us-west-2.amazonaws.com/glm-130b.tar.gz",
+    #     "worker_model":"glm-130b",
+    #     "docker_image": "xzyaoi/glm:0.0.1",
+    #     "sif_name": "glm.sif",
+    #     "startup_command": "/app/start_dist_glm.sh",
+    #     "together_name":"together/glm-130b"
+    # },
 }
 
 BINARY_CONFIG = {
