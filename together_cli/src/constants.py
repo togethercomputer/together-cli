@@ -23,7 +23,6 @@ MODEL_CONFIG = {
         "worker_model":"together/h3-1.3b",
         "docker_image": "xzyaoi/h3:0.0.3",
         "sif_name": "h3-0.0.1.sif",
-        "model_type": "",
         "startup_command":"/workspace/H3/serve_1.3b.sh",
         "together_name":"h3-1.3b-h3"
     },
