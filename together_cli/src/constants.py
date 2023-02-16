@@ -55,7 +55,7 @@ MODEL_CONFIG = {
         "startup_command":"/workspace/Port_FasterTransformer/serve.sh",
         "together_name":"opt-6.7b-ft-tp1",
     },
-    'gpt-jt': {
+    'gpt-jt-6b-v1-ft-tp1': {
         "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/ft_base_ampere.sif",
         "weights_url":"https://together-singularity.s3.us-west-2.amazonaws.com/gpt-jt-6b-v1.tar.gz",
         "worker_model":"GPT-JT-6B-v1-tp1",
