@@ -37,7 +37,7 @@ MODEL_CONFIG = {
     },
     'opt-1.3b-ft-tp1': {
         "singularity_url": "https://filedn.eu/lougUsdPvd1uJK2jfOYWogH/toma_models/ft_base_ampere.sif",
-        "weights_url":"https://filedn.eu/lougUsdPvd1uJK2jfOYWogH/toma_models/opt-1.3b-tp1.tar.gz",
+        "weights_url":"https://together-singularity.s3.us-west-2.amazonaws.com/opt-1.3b-tp1.tar.gz",
         "worker_model":"opt-1.3b-tp1",
         "docker_image": "xzyaoi/faster_transformer:0.0.3",
         "sif_name": "ft_base_ampere.sif",
@@ -47,7 +47,7 @@ MODEL_CONFIG = {
     },
     'opt-6.7b-ft-tp1': {
         "singularity_url": "https://filedn.eu/lougUsdPvd1uJK2jfOYWogH/toma_models/ft_base_ampere.sif",
-        "weights_url":"https://filedn.eu/lougUsdPvd1uJK2jfOYWogH/toma_models/opt-6.7b-tp1.tar.gz",
+        "weights_url":"https://together-singularity.s3.us-west-2.amazonaws.com/opt-6.7b-tp1.tar.gz",
         "docker_image": "xzyaoi/faster_transformer:0.0.3",
         "sif_name": "ft_base_ampere.sif",
         "worker_model":"opt-6.7b-tp1",
@@ -91,14 +91,14 @@ MODEL_CONFIG = {
         "startup_command": "/app/serve_opt_iml_30b.sh",
         "together_name":"opt-iml-30b-hf"
     },
-    "codegen-16b-mono-hf":{
+    "codegen-mono-16b-hf":{
         "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/native_hf_model.sif",
         "worker_model":"codegen-16b-mono",
         "docker_image": "xzyaoi/native_hf_models:0.0.3",
         "sif_name": "native_hf_model.sif",
         "from_hf":"Salesforce/codegen-16b-mono",
         "startup_command": "/app/serve_codegen_16b_mono.sh",
-        "together_name":"codegen-16b-mono-hf"
+        "together_name":"codegen-mono-16b-hf"
     },
     # "chip-20b":{
     #     "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/native_hf_model.sif",
