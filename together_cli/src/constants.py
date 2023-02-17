@@ -6,7 +6,8 @@ MODEL_CONFIG = {
         "docker_image": "xzyaoi/h3:0.0.3",
         "sif_name": "h3-0.0.1.sif",
         "startup_command":"/workspace/H3/serve_125m.sh",
-        "together_name":"h3-125m-h3"
+        "together_name":"h3-125m-h3",
+        "min_gpu_memory": 2
     },
     'h3-2.7b-h3':{
         "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/h3-0.0.1.sif",
@@ -15,7 +16,8 @@ MODEL_CONFIG = {
         "docker_image": "xzyaoi/h3:0.0.3",
         "sif_name": "h3-0.0.1.sif",
         "startup_command":"/workspace/H3/serve_2.7b.sh",
-        "together_name":"h3-2.7b-h3"
+        "together_name":"h3-2.7b-h3",
+        "min_gpu_memory": 16
     },
     'h3-1.3b-h3':{
         "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/h3-0.0.1.sif",
@@ -24,7 +26,8 @@ MODEL_CONFIG = {
         "docker_image": "xzyaoi/h3:0.0.3",
         "sif_name": "h3-0.0.1.sif",
         "startup_command":"/workspace/H3/serve_1.3b.sh",
-        "together_name":"h3-1.3b-h3"
+        "together_name":"h3-1.3b-h3",
+        "min_gpu_memory": 8
     },
     'h3-355m-h3':{
         "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/h3-0.0.1.sif",
@@ -33,7 +36,8 @@ MODEL_CONFIG = {
         "docker_image": "xzyaoi/h3:0.0.3",
         "sif_name": "h3-0.0.1.sif",
         "startup_command":"/workspace/H3/serve_355m.sh",
-        "together_name":"h3-355m-h3"
+        "together_name":"h3-355m-h3",
+        "min_gpu_memory": 16
     },
     'opt-1.3b-ft-tp1': {
         "singularity_url": "https://filedn.eu/lougUsdPvd1uJK2jfOYWogH/toma_models/ft_base_ampere.sif",
@@ -43,7 +47,8 @@ MODEL_CONFIG = {
         "sif_name": "ft_base_ampere.sif",
         "model_type": "gpt",
         "startup_command":"/workspace/Port_FasterTransformer/serve.sh",
-        "together_name":"opt-1.3b-ft-tp1"
+        "together_name":"opt-1.3b-ft-tp1",
+        "min_gpu_memory": 3
     },
     'opt-6.7b-ft-tp1': {
         "singularity_url": "https://filedn.eu/lougUsdPvd1uJK2jfOYWogH/toma_models/ft_base_ampere.sif",
@@ -54,6 +59,7 @@ MODEL_CONFIG = {
         "model_type": "gpt",
         "startup_command":"/workspace/Port_FasterTransformer/serve.sh",
         "together_name":"opt-6.7b-ft-tp1",
+        "min_gpu_memory": 16
     },
     'gpt-jt-6b-v1-ft-tp1': {
         "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/ft_base_ampere.sif",
@@ -63,7 +69,8 @@ MODEL_CONFIG = {
         "sif_name": "ft_base_ampere.sif",
         "model_type": "gptj",
         "startup_command":"/workspace/Port_FasterTransformer/serve.sh",
-        "together_name":"gpt-jt-6b-v1-ft-tp1"
+        "together_name":"gpt-jt-6b-v1-ft-tp1",
+        "min_gpu_memory": 16
     },
     'universal-sd':{
         "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/h3-0.0.1.sif",
@@ -71,7 +78,8 @@ MODEL_CONFIG = {
         "docker_image": "xzyaoi/universal-sd:0.0.3",
         "sif_name": "usd-0.0.1.sif",
         "startup_command":"/app/serve.sh",
-        "together_name":"universal-sd"
+        "together_name":"universal-sd",
+        "min_gpu_memory": 8
     },
     "flan-t5-xxl-hf":{
         "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/native_hf_model.sif",
@@ -80,7 +88,8 @@ MODEL_CONFIG = {
         "sif_name": "flan-t5-xxl.sif",
         "from_hf":"google/flan-t5-xxl",
         "startup_command": "/app/serve_flant5xxl.sh",
-        "together_name":"flan-t5-xxl-hf"
+        "together_name":"flan-t5-xxl-hf",
+        "min_gpu_memory": 32
     },
     "opt-iml-30b-hf":{
         "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/native_hf_model.sif",
@@ -89,7 +98,8 @@ MODEL_CONFIG = {
         "sif_name": "native_hf_model.sif",
         "from_hf":"facebook/opt-iml-30b",
         "startup_command": "/app/serve_opt_iml_30b.sh",
-        "together_name":"opt-iml-30b-hf"
+        "together_name":"opt-iml-30b-hf",
+        "min_gpu_memory": 60
     },
     "codegen-mono-16b-hf":{
         "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/native_hf_model.sif",
@@ -98,7 +108,8 @@ MODEL_CONFIG = {
         "sif_name": "native_hf_model.sif",
         "from_hf":"Salesforce/codegen-16b-mono",
         "startup_command": "/app/serve_codegen_16b_mono.sh",
-        "together_name":"codegen-mono-16b-hf"
+        "together_name":"codegen-mono-16b-hf",
+        "min_gpu_memory": 32
     },
     # "chip-20b":{
     #     "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/native_hf_model.sif",

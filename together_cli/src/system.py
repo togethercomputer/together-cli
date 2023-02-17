@@ -1,8 +1,15 @@
 import os
 import fcntl
+import signal
 import subprocess
-import signal, errno
+from loguru import logger
 from contextlib import contextmanager
+from pynvml import nvmlInit, nvmlDeviceGetCount, nvmlDeviceGetHandleByIndex, nvmlDeviceGetMemoryInfo
+
+try:
+    nvmlInit()
+except:
+    logger.warning("Unable to initialize NVML, GPU information will not be available.")
 
 def check_binary_exists(binary):
     try:
@@ -50,3 +57,14 @@ def check_lockable_drive(dir):
             # remove lock file
             os.remove(lock_file)
             return False
+
+def get_free_gpu_memory():
+    device_count  = nvmlDeviceGetCount()
+    if device_count > 0:
+        handle = nvmlDeviceGetHandleByIndex(0)
+        mem_info = nvmlDeviceGetMemoryInfo(handle)
+        free_memory = mem_info.free/1024/1024/1024
+        return free_memory
+    else:
+        logger.warning("No GPU found, please check your GPU driver.")
+        return 0

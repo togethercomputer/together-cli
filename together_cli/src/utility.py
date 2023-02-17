@@ -10,6 +10,7 @@ from loguru import logger
 from rich.console import Console
 from rich.progress import Progress
 from huggingface_hub import list_repo_files
+
 console = Console()
 
 def download_hf_files(hf_name: str, local_path: str):
@@ -79,3 +80,4 @@ def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
         return ''.join(random.choice(chars) for _ in range(size))
     else:
         return reusable_id
+

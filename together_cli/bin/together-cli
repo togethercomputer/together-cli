@@ -2,11 +2,12 @@
 import os
 import typer
 from typing import Optional
-from together_cli.src.core.instances import pprint_instances, shutdown_instance, fetch_logs
 from together_cli.src.model import serve_model
-from together_cli.src.system import check_binary_exists, check_folders, check_lockable_drive
-from together_cli.src.core.models import pprint_models
+from together_cli.src.constants import MODEL_CONFIG
 from together_cli.src.core.config import read_config
+from together_cli.src.core.models import pprint_models, get_current_load
+from together_cli.src.core.instances import pprint_instances, shutdown_instance, fetch_logs
+from together_cli.src.system import check_binary_exists, check_folders, check_lockable_drive, get_free_gpu_memory
 
 app = typer.Typer()
 home_dir = os.path.expanduser("~")
@@ -27,7 +28,7 @@ def check():
 @app.command()
 def serve(
         # required arguments
-        model: str = typer.Option(...,
+        model: str = typer.Option("auto",
             prompt="What's the model name you want to serve?"
         ),
         home_dir: str = typer.Option(
@@ -65,6 +66,21 @@ def serve(
         owner: str = typer.Option(
                 "", help="Owner of the instance - default is None"),
     ):
+    if model == 'auto':
+        loads = get_current_load()
+        free_gpu_memory = get_free_gpu_memory()
+        # filter out models that min_gpu_memory < free_gpu_memory
+        hostable_models = [x for x in loads.keys()]
+        hostable_models = [x for x in loads.keys() if MODEL_CONFIG[x]['min_gpu_memory'] < free_gpu_memory]
+        # sort hostable models by load
+        if "academic" in tags:
+            hostable_models = sorted(hostable_models, key=lambda x: loads[x]['academic_queries'], reverse=True)
+        else:
+            hostable_models = sorted(hostable_models, key=lambda x: loads[x]['queries'], reverse=True)
+        print(f"[INFO] [INFO] Free GPU Mem: {free_gpu_memory:.2f}GB. Hostable models sorted by load: {hostable_models}")
+        print(f"[INFO] Will host {hostable_models[0]}")
+        model = hostable_models[0]
+        
     if docker and singularity:
         print("[ERROR] You can only choose one of docker or singularity")
         return
