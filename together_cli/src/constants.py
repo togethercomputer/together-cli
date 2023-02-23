@@ -119,5 +119,15 @@ MODEL_CONFIG = {
         "startup_command": "/app/serve_bloomz.sh",
         "together_name":"bloomz-176b-alpa",
         "min_gpu_memory": 75
+    },
+    "galactica-120b-accelerate": {
+        "singularity_url":"https://together-singularity.s3.us-west-2.amazonaws.com/native_hf_model.sif",
+        "worker_model":"galactica-120b-accelerate",
+        "docker_image": "xzyaoi/native_hf_models:0.0.4",
+        "sif_name": "native_hf_model.sif",
+        "from_hf":"facebook/galactica-120b",
+        "startup_command": "/app/serve_galactica.sh",
+        "together_name":"galactica-120b-accelerate",
+        "min_gpu_memory": 30
     }
 }
