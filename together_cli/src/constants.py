@@ -84,7 +84,7 @@ MODEL_CONFIG = {
     "flan-t5-xxl-hf":{
         "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/native_hf_model.sif",
         "worker_model":"flan-t5-xxl",
-        "docker_image": "xzyaoi/native_hf_models:0.0.3",
+        "docker_image": "xzyaoi/native_hf_models:0.0.4",
         "sif_name": "flan-t5-xxl.sif",
         "from_hf":"google/flan-t5-xxl",
         "startup_command": "/app/serve_flant5xxl.sh",
@@ -94,7 +94,7 @@ MODEL_CONFIG = {
     "opt-iml-30b-hf":{
         "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/native_hf_model.sif",
         "worker_model":"opt-iml-30b",
-        "docker_image": "xzyaoi/native_hf_models:0.0.3",
+        "docker_image": "xzyaoi/native_hf_models:0.0.4",
         "sif_name": "native_hf_model.sif",
         "from_hf":"facebook/opt-iml-30b",
         "startup_command": "/app/serve_opt_iml_30b.sh",
@@ -104,36 +104,20 @@ MODEL_CONFIG = {
     "codegen-mono-16b-hf":{
         "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/native_hf_model.sif",
         "worker_model":"codegen-16b-mono",
-        "docker_image": "xzyaoi/native_hf_models:0.0.3",
+        "docker_image": "xzyaoi/native_hf_models:0.0.4",
         "sif_name": "native_hf_model.sif",
         "from_hf":"Salesforce/codegen-16b-mono",
         "startup_command": "/app/serve_codegen_16b_mono.sh",
         "together_name":"codegen-mono-16b-hf",
         "min_gpu_memory": 32
     },
-    # "chip-20b":{
-    #     "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/native_hf_model.sif",
-    #     "worker_model":"chip-20b",
-    #     "docker_image": "xzyaoi/native_hf_models:0.0.2",
-    #     "sif_name": "native_hf_model.sif",
-    #     "from_hf":"Rallio67/chip_20B_instruct_alpha",
-    #     "startup_command": "/app/serve_chip_20b.sh",
-    #     "together_name":"together/chip_20b_instruct_alpha"
-    # },
-    # "glm-130b":{
-    #     "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/glm.sif",
-    #     "weights_url":"https://together-singularity.s3.us-west-2.amazonaws.com/glm-130b.tar.gz",
-    #     "worker_model":"glm-130b",
-    #     "docker_image": "xzyaoi/glm:0.0.1",
-    #     "sif_name": "glm.sif",
-    #     "startup_command": "/app/start_dist_glm.sh",
-    #     "together_name":"together/glm-130b"
-    # },
-}
-
-BINARY_CONFIG = {
-    "GO-TOGETHER": {
-        "url":"https://filedn.eu/lougUsdPvd1uJK2jfOYWogH/together",
-        "config_url":"",
+    "bloomz-176b-alpa": {
+        "singularity_url":"https://together-singularity.s3.us-west-2.amazonaws.com/native_hf_model.sif",
+        "worker_model":"bloomz-176b-alpa",
+        "docker_image": "xzyaoi/native_hf_models:0.0.4",
+        "sif_name": "native_hf_model.sif",
+        "startup_command": "/app/serve_bloomz.sh",
+        "together_name":"bloomz-176b-alpa",
+        "min_gpu_memory": 75
     }
 }
