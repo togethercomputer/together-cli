@@ -130,14 +130,14 @@ MODEL_CONFIG = {
         "together_name":"galactica-120b-accelerate",
         "min_gpu_memory": 30
     },
-    "chip2-instruct-alpha-7b": {
+    "chip2-instruct-alpha-7b-hf": {
         "singularity_url": "https://together-singularity.s3.us-west-2.amazonaws.com/native_hf_model.sif",
-        "worker_model":"chip2-instruct-alpha-7b",
+        "worker_model":"chip2-instruct-alpha-7b-hf",
         "docker_image": "xzyaoi/native_hf_models:0.0.6",
         "sif_name": "native_hf_models.sif",
         "from_hf":"Rallio67/chip2_7B_instruct_alpha",
-        "startup_command": "/app/serve_general_local.sh Rallio67/chip2_7B_instruct_alpha /home/user/.together/models/chip2-instruct-alpha-7b",
-        "together_name":"chip2-instruct-alpha-7b",
+        "startup_command": "'/app/serve_general_local.sh Rallio67/chip2_7B_instruct_alpha /home/user/.together/models/chip2-instruct-alpha-7b-hf'",
+        "together_name":"chip2-instruct-alpha-7b-hf",
         "min_gpu_memory": 14
     }
 }
